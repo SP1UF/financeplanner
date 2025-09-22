@@ -14,11 +14,16 @@ document.addEventListener("DOMContentLoaded", () => {
   // Dane użytkownika
   let incomes = Array(12).fill(0); // 12 miesięcy
   let bankBalance = 0;
-  let goals = []; // bez pre-wpisanych celów
+  let goals = []; // cele od zera
+
+  // Funkcja formatująca kwotę
+  function formatPLN(value){
+    return Number(value).toFixed(2).replace('.',',') + " PLN";
+  }
 
   // Stan konta
   const balanceEl = document.getElementById('bank-balance');
-  function refreshBalance() { balanceEl.textContent = bankBalance + " PLN"; }
+  function refreshBalance() { balanceEl.textContent = formatPLN(bankBalance); }
 
   // Wykres zarobków
   const incomeCtx = document.getElementById('income-chart').getContext('2d');
@@ -39,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const wrapper = document.createElement('div');
       wrapper.classList.add('goal-chart-wrapper');
       const label = document.createElement('span');
-      label.textContent = `${g.name} (${g.saved}/${g.amount})`;
+      label.textContent = `${g.name} (${formatPLN(g.saved)} / ${formatPLN(g.amount)})`;
       const canvas = document.createElement('canvas');
       wrapper.appendChild(label);
       wrapper.appendChild(canvas);
@@ -56,10 +61,15 @@ document.addEventListener("DOMContentLoaded", () => {
   // Dodawanie celów z dashboard
   document.getElementById('add-goal-btn').addEventListener('click', ()=>{
     const name = prompt("Nazwa celu:");
-    const amount = parseFloat(prompt("Kwota celu:"));
-    if(name && !isNaN(amount)){
-      goals.push({name:name, amount:amount, saved:0});
-      refreshGoalsDashboard();
+    let amountInput = prompt("Kwota celu (np. 5000 lub 5000,50):");
+    if(name && amountInput){
+      // Zamiana przecinka na kropkę i parsowanie
+      amountInput = amountInput.replace(',', '.');
+      const amount = parseFloat(amountInput);
+      if(!isNaN(amount)){
+        goals.push({name:name, amount:amount, saved:0});
+        refreshGoalsDashboard();
+      } else { alert("Nieprawidłowa kwota."); }
     }
   });
 
@@ -69,13 +79,18 @@ document.addEventListener("DOMContentLoaded", () => {
   txForm.addEventListener('submit', e=>{
     e.preventDefault();
     const date = document.getElementById('tx-date').value;
-    const amount = parseFloat(document.getElementById('tx-amount').value);
+    let amountInput = document.getElementById('tx-amount').value.trim();
+    amountInput = amountInput.replace(',', '.');
+    const amount = parseFloat(amountInput);
     const type = document.getElementById('tx-type').value;
     const note = document.getElementById('tx-note').value;
 
-    if(isNaN(amount)) return;
+    if(isNaN(amount)){
+      alert("Podaj poprawną kwotę (np. 5,50 lub 5.50)");
+      return;
+    }
 
-    // Zapis
+    // Zapis i aktualizacja konta
     if(type==='income'){
       bankBalance += amount;
       const month = new Date(date).getMonth();
@@ -90,10 +105,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Dodaj do listy
     const li = document.createElement('li');
-    li.textContent = `${date} | ${type==='income'?'+':'-'}${amount} PLN | ${note}`;
+    li.textContent = `${date} | ${type==='income'?'+':'-'}${formatPLN(amount)} | ${note}`;
     txList.appendChild(li);
 
-    // Czyści formularz
     txForm.reset();
   });
 
