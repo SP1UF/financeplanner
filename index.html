@@ -2,82 +2,107 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Finance Planner</title>
   <base href="./">
   <link rel="manifest" href="./manifest.json">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
   <link rel="stylesheet" href="./styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <header>
-    <h1>Finance Planner</h1>
-    <nav>
-      <button id="nav-dashboard">Dashboard</button>
-      <button id="nav-transactions">Transakcje</button>
-      <button id="nav-calendar">Kalendarz</button>
-      <button id="nav-goals">Cele</button>
-    </nav>
-  </header>
+  <!-- Instrukcja dla Safari -->
+  <div id="install-instructions" class="fullscreen" style="display:none">
+    <div class="card">
+      <h2>Dodaj aplikację</h2>
+      <p>Aby korzystać z Finance Planner:</p>
+      <ol>
+        <li>Dotknij <strong>Udostępnij</strong> (ikona kwadratu ze strzałką w górę).</li>
+        <li>Wybierz <strong>Dodaj do ekranu początkowego</strong>.</li>
+        <li>Otwórz aplikację z nowej ikony.</li>
+      </ol>
+    </div>
+  </div>
 
-  <main>
-    <!-- Dashboard -->
-    <section id="view-dashboard" class="view">
-      <div class="card">
-        <h2>Podsumowanie</h2>
-        <div id="summary"></div>
-      </div>
-      <div class="card">
-        <h2>Wykres miesięczny</h2>
-        <canvas id="chart-monthly"></canvas>
-      </div>
-    </section>
+  <!-- Aplikacja -->
+  <div id="app" style="display:none">
+    <header>
+      <h1>Finance Planner</h1>
+      <nav>
+        <button id="nav-dashboard">Dashboard</button>
+        <button id="nav-transactions">Transakcje</button>
+        <button id="nav-calendar">Kalendarz</button>
+        <button id="nav-goals">Cele</button>
+      </nav>
+    </header>
 
-    <!-- Transactions -->
-    <section id="view-transactions" class="view">
-      <div class="card">
-        <h2>Dodaj transakcję</h2>
-        <form id="transaction-form" class="form">
-          <input type="date" id="tx-date" required>
-          <input type="number" id="tx-amount" placeholder="Kwota" required>
-          <select id="tx-type">
-            <option value="income">Zarobek</option>
-            <option value="expense">Wydatek</option>
-          </select>
-          <input type="text" id="tx-note" placeholder="Notatka">
-          <button type="submit">Dodaj</button>
-        </form>
-      </div>
-      <div class="card">
-        <h2>Historia transakcji</h2>
-        <ul id="tx-list"></ul>
-      </div>
-    </section>
+    <main>
+      <section id="view-dashboard" class="view">
+        <div class="card">
+          <h2>Podsumowanie</h2>
+          <div id="summary"></div>
+        </div>
+        <div class="card">
+          <h2>Wykres miesięczny</h2>
+          <canvas id="chart-monthly"></canvas>
+        </div>
+      </section>
 
-    <!-- Calendar -->
-    <section id="view-calendar" class="view">
-      <div class="card">
-        <h2>Kalendarz</h2>
-        <label>Miesiąc: <input type="month" id="calendar-month"></label>
-        <div id="calendar-days"></div>
-      </div>
-    </section>
+      <section id="view-transactions" class="view">
+        <div class="card">
+          <h2>Dodaj transakcję</h2>
+          <form id="transaction-form" class="form">
+            <input type="date" id="tx-date" required>
+            <input type="number" id="tx-amount" placeholder="Kwota" required>
+            <select id="tx-type">
+              <option value="income">Zarobek</option>
+              <option value="expense">Wydatek</option>
+            </select>
+            <input type="text" id="tx-note" placeholder="Notatka">
+            <button type="submit">Dodaj</button>
+          </form>
+        </div>
+        <div class="card">
+          <h2>Historia transakcji</h2>
+          <ul id="tx-list"></ul>
+        </div>
+      </section>
 
-    <!-- Goals -->
-    <section id="view-goals" class="view">
-      <div class="card">
-        <h2>Cele</h2>
-        <form id="goal-form" class="form">
-          <input type="text" id="goal-name" placeholder="Nazwa celu" required>
-          <input type="number" id="goal-amount" placeholder="Kwota" required>
-          <button type="submit">Dodaj cel</button>
-        </form>
-        <ul id="goal-list"></ul>
-      </div>
-    </section>
-  </main>
+      <section id="view-calendar" class="view">
+        <div class="card">
+          <h2>Kalendarz</h2>
+          <label>Miesiąc: <input type="month" id="calendar-month"></label>
+          <div id="calendar-days"></div>
+        </div>
+      </section>
+
+      <section id="view-goals" class="view">
+        <div class="card">
+          <h2>Cele</h2>
+          <form id="goal-form" class="form">
+            <input type="text" id="goal-name" placeholder="Nazwa celu" required>
+            <input type="number" id="goal-amount" placeholder="Kwota" required>
+            <button type="submit">Dodaj cel</button>
+          </form>
+          <ul id="goal-list"></ul>
+        </div>
+      </section>
+    </main>
+  </div>
 
   <script src="./db.js"></script>
   <script src="./app.js"></script>
+  <script>
+    // Pokazanie odpowiedniego ekranu
+    if (window.navigator.standalone === true) {
+      // działa jako PWA
+      document.getElementById('app').style.display = 'block';
+    } else {
+      // Safari
+      document.getElementById('install-instructions').style.display = 'flex';
+    }
+  </script>
 </body>
 </html>
