@@ -1,24 +1,23 @@
-const CACHE_NAME = 'planner-cache-v1';
-const FILES = [
-  '/',
-  '/index.html',
-  '/styles.css',
-  '/app.js',
-  '/db.js',
-  '/manifest.json'
+const CACHE_NAME = "financeplanner-cache-v1";
+const urlsToCache = [
+  "./",
+  "./index.html",
+  "./styles.css",
+  "./app.js",
+  "./db.js",
+  "./manifest.json",
+  "./icons/icon-192.png",
+  "./icons/icon-512.png"
 ];
 
-self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(FILES)));
-  self.skipWaiting();
+self.addEventListener("install", event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+  );
 });
 
-self.addEventListener('activate', e => {
-  e.waitUntil(self.clients.claim());
-});
-
-self.addEventListener('fetch', e => {
-  e.respondWith(
-    caches.match(e.request).then(resp => resp || fetch(e.request).catch(()=>caches.match('/index.html')))
+self.addEventListener("fetch", event => {
+  event.respondWith(
+    caches.match(event.request).then(resp => resp || fetch(event.request))
   );
 });
