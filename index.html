@@ -28,18 +28,29 @@
 
   <!-- Aplikacja -->
   <div id="app" style="display:none">
-    <header>
+    <!-- Górny pasek -->
+    <header class="topbar">
+      <button id="menu-toggle" class="menu-btn">☰</button>
       <h1>Finance Planner</h1>
-      <nav>
-        <button id="nav-dashboard">Dashboard</button>
-        <button id="nav-transactions">Transakcje</button>
-        <button id="nav-calendar">Kalendarz</button>
-        <button id="nav-goals">Cele</button>
-      </nav>
     </header>
 
+    <!-- Wysuwane menu -->
+    <nav id="sidebar">
+      <button class="close-btn">×</button>
+      <ul>
+        <li><button class="nav-link" data-target="dashboard">🏠 Dashboard</button></li>
+        <li><button class="nav-link" data-target="transactions">💸 Transakcje</button></li>
+        <li><button class="nav-link" data-target="calendar">📅 Kalendarz</button></li>
+        <li><button class="nav-link" data-target="goals">🎯 Cele</button></li>
+      </ul>
+    </nav>
+
+    <!-- Overlay -->
+    <div id="overlay"></div>
+
+    <!-- Główna treść -->
     <main>
-      <section id="view-dashboard" class="view">
+      <section id="view-dashboard" class="view active">
         <div class="card">
           <h2>Podsumowanie</h2>
           <div id="summary"></div>
@@ -95,14 +106,38 @@
   <script src="./db.js"></script>
   <script src="./app.js"></script>
   <script>
-    // Pokazanie odpowiedniego ekranu
+    // Safari vs PWA
     if (window.navigator.standalone === true) {
-      // działa jako PWA
       document.getElementById('app').style.display = 'block';
     } else {
-      // Safari
       document.getElementById('install-instructions').style.display = 'flex';
     }
+
+    // Obsługa menu
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    document.getElementById('menu-toggle').addEventListener('click', () => {
+      sidebar.classList.add('open');
+      overlay.classList.add('show');
+    });
+    document.querySelector('#sidebar .close-btn').addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('show');
+    });
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('show');
+    });
+
+    // Nawigacja
+    document.querySelectorAll('.nav-link').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById('view-' + btn.dataset.target).classList.add('active');
+        sidebar.classList.remove('open');
+        overlay.classList.remove('show');
+      });
+    });
   </script>
 </body>
 </html>
