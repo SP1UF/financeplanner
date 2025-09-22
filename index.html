@@ -25,22 +25,23 @@
   </div>
 </div>
 
-<!-- Aplikacja -->
 <div id="app" style="display:none">
   <main>
     <!-- Dashboard -->
     <section id="view-dashboard" class="view active">
       <div class="card">
+        <h2>Stan konta bankowego</h2>
+        <div id="bank-balance">0 PLN</div>
+      </div>
+
+      <div class="card">
         <h2>Wykres zarobków (12 miesięcy)</h2>
         <canvas id="income-chart"></canvas>
       </div>
-      <div class="card">
-        <h2>Procent realizacji celów</h2>
-        <canvas id="goals-chart"></canvas>
-      </div>
-      <div class="card">
-        <h2>Cele</h2>
-        <ul id="goal-list-dashboard"></ul>
+
+      <div class="card" id="goals-dashboard">
+        <h2>Realizacja celów</h2>
+        <div id="goals-charts-container"></div>
         <button id="add-goal-btn">Dodaj nowy cel</button>
       </div>
     </section>
