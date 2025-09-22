@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Finance Planner</title>
   <link rel="stylesheet" href="./styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
@@ -27,17 +28,24 @@
 <!-- Aplikacja -->
 <div id="app" style="display:none">
   <main>
+    <!-- Dashboard -->
     <section id="view-dashboard" class="view active">
       <div class="card">
-        <h2>Podsumowanie</h2>
-        <div id="summary"></div>
+        <h2>Wykres zarobków (12 miesięcy)</h2>
+        <canvas id="income-chart"></canvas>
       </div>
       <div class="card">
-        <h2>Wykres miesięczny</h2>
-        <canvas id="chart-monthly"></canvas>
+        <h2>Procent realizacji celów</h2>
+        <canvas id="goals-chart"></canvas>
+      </div>
+      <div class="card">
+        <h2>Cele</h2>
+        <ul id="goal-list-dashboard"></ul>
+        <button id="add-goal-btn">Dodaj nowy cel</button>
       </div>
     </section>
 
+    <!-- Transakcje -->
     <section id="view-transactions" class="view">
       <div class="card">
         <h2>Dodaj transakcję</h2>
@@ -58,6 +66,7 @@
       </div>
     </section>
 
+    <!-- Kalendarz -->
     <section id="view-calendar" class="view">
       <div class="card">
         <h2>Kalendarz</h2>
@@ -66,15 +75,16 @@
       </div>
     </section>
 
+    <!-- Cele -->
     <section id="view-goals" class="view">
       <div class="card">
-        <h2>Cele</h2>
+        <h2>Lista celów</h2>
+        <ul id="goal-list"></ul>
         <form id="goal-form" class="form">
           <input type="text" id="goal-name" placeholder="Nazwa celu" required>
           <input type="number" id="goal-amount" placeholder="Kwota" required>
           <button type="submit">Dodaj cel</button>
         </form>
-        <ul id="goal-list"></ul>
       </div>
     </section>
   </main>
@@ -90,7 +100,6 @@
 
 <script src="./app.js"></script>
 <script>
-  // PWA check
   if (window.navigator.standalone === true) {
     document.getElementById("app").style.display = "block";
   } else {

@@ -1,0 +1,57 @@
+:root {
+  --bg: #ffffff;
+  --text: #222222;
+  --card: #f8f8f8;
+  --accent: #3b82f6;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121212;
+    --text: #f0f0f0;
+    --card: #1e1e1e;
+    --accent: #3b82f6;
+  }
+}
+
+* { box-sizing:border-box; }
+body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); }
+
+main { padding-bottom:100px; }
+.view { display:none; padding:1rem; }
+.view.active { display:block; }
+
+.card {
+  background: var(--card);
+  padding:1.5rem;
+  border-radius:1rem;
+  margin-bottom:1.5rem;
+  box-shadow:0 2px 8px rgba(0,0,0,0.15);
+}
+.card h2 { font-size:1.6rem; margin-bottom:1rem; font-weight:600; }
+
+.form input, .form select, .form button {
+  width:100%;
+  padding:1rem;
+  margin:0.5rem 0;
+  border-radius:0.6rem;
+  border:1px solid #ccc;
+  font-size:1.1rem;
+}
+.form button { background:var(--accent); color:#fff; border:none; cursor:pointer; font-weight:600; }
+.form button:hover { opacity:0.9; }
+
+#tx-list, #goal-list, #goal-list-dashboard { list-style:none; padding:0; margin:0; }
+#tx-list li, #goal-list li, #goal-list-dashboard li { padding:0.8rem; border-bottom:1px solid #ccc; font-size:1.1rem; }
+
+.fullscreen { position:fixed; top:0; left:0; right:0; bottom:0; background:var(--bg); color:var(--text); display:flex; align-items:center; justify-content:center; padding:20px; text-align:center; }
+.fullscreen .card { max-width:400px; }
+
+.bottom-nav {
+  position:fixed; bottom:0; left:0; right:0; height:90px;
+  display:flex; background:var(--card); border-top:1px solid #ccc; z-index:1000;
+}
+.bottom-nav .nav-btn {
+  flex:1; border:none; background:none; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  font-size:1.4rem; color:var(--text); cursor:pointer; font-weight:600; padding:0.5rem 0;
+}
+.bottom-nav .nav-btn.active { color:var(--accent); }
