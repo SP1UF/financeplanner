@@ -1,8 +1,92 @@
-body{font-family:sans-serif;margin:0;padding:0;background:#1e1e1e;color:white}
-header{background:#333;padding:10px;display:flex;justify-content:space-between;align-items:center}
-nav button{margin-right:5px;padding:5px 10px;background:#555;color:white;border:none;border-radius:4px}
-main{padding:10px}
-.view{display:none}
-form input,form select,form button{margin:2px;padding:5px}
-#calendar-days{margin-top:12px;display:flex;flex-direction:column;gap:6px}
-.calendar-day{padding:8px 10px;border-radius:6px;background:rgba(255,255,255,0.03);display:flex;justify-content:space-between;align-items:center}
+/* Automatyczny motyw jasny/ciemny */
+:root {
+  --bg: #f5f5f5;
+  --card-bg: #fff;
+  --text: #222;
+  --accent: #4cafef;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121212;
+    --card-bg: #1e1e1e;
+    --text: #f0f0f0;
+    --accent: #4cafef;
+  }
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+header {
+  background: var(--card-bg);
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+nav button {
+  margin-right: 5px;
+  padding: 6px 12px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 6px;
+}
+
+main {
+  padding: 15px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+.view { display: none; }
+
+.card {
+  background: var(--card-bg);
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.form input, .form select, .form button {
+  margin: 4px 0;
+  padding: 8px;
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+#calendar-days {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.calendar-day {
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progress-bar {
+  background: #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 4px 0;
+}
+.progress-fill {
+  background: var(--accent);
+  height: 10px;
+  width: 0%;
+  transition: width 0.3s;
+}

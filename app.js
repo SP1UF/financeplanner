@@ -1,21 +1,17 @@
-// Rejestracja service workera
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(console.error);
 }
 
-// Funkcja do pokazywania widoków
 function show(viewId) {
   document.querySelectorAll('.view').forEach(v => v.style.display='none');
   document.getElementById(viewId).style.display='block';
 }
 
-// Nawigacja
-document.getElementById('nav-dashboard').onclick = () => { show('view-dashboard'); refreshSummary(); };
+document.getElementById('nav-dashboard').onclick = () => { show('view-dashboard'); refreshSummary(); drawMonthlyChart(); };
 document.getElementById('nav-transactions').onclick = () => { show('view-transactions'); refreshTransactions(); };
 document.getElementById('nav-calendar').onclick = () => { show('view-calendar'); refreshCalendar(); };
 document.getElementById('nav-goals').onclick = () => { show('view-goals'); refreshGoals(); };
 
-// Formularz transakcji
 document.getElementById('transaction-form').onsubmit = async e => {
   e.preventDefault();
   const tx = {
@@ -29,9 +25,9 @@ document.getElementById('transaction-form').onsubmit = async e => {
   refreshTransactions();
   refreshCalendar();
   refreshSummary();
+  drawMonthlyChart();
 };
 
-// Formularz celów
 document.getElementById('goal-form').onsubmit = async e => {
   e.preventDefault();
   const goal = {
@@ -43,7 +39,6 @@ document.getElementById('goal-form').onsubmit = async e => {
   refreshGoals();
 };
 
-// Funkcje renderowania
 async function refreshTransactions(){
   const list = document.getElementById('tx-list');
   const txns = await getAll('txns');
@@ -53,7 +48,15 @@ async function refreshTransactions(){
 async function refreshGoals(){
   const list = document.getElementById('goal-list');
   const goals = await getAll('goals');
-  list.innerHTML = goals.map(g=>`<li>${g.name}: ${g.amount}</li>`).join('');
+  const txns = await getAll('txns');
+  const income = txns.filter(t=>t.type==='income').reduce((a,b)=>a+b.amount,0);
+  list.innerHTML = goals.map(g=>{
+    const percent = Math.min(100, Math.round((income / g.amount) * 100));
+    return `<li>
+      <strong>${g.name}</strong>: ${income}/${g.amount} (${percent}%)
+      <div class="progress-bar"><div class="progress-fill" style="width:${percent}%"></div></div>
+    </li>`;
+  }).join('');
 }
 
 async function refreshSummary(){
@@ -61,7 +64,7 @@ async function refreshSummary(){
   const txns = await getAll('txns');
   const income = txns.filter(t=>t.type==='income').reduce((a,b)=>a+b.amount,0);
   const expense = txns.filter(t=>t.type==='expense').reduce((a,b)=>a+b.amount,0);
-  sumDiv.innerHTML = `Zarobki: ${income} | Wydatki: ${expense} | Bilans: ${income-expense}`;
+  sumDiv.innerHTML = `<p>Zarobki: ${income}</p><p>Wydatki: ${expense}</p><p>Bilans: ${income-expense}</p>`;
 }
 
 async function refreshCalendar(){
@@ -84,8 +87,45 @@ async function refreshCalendar(){
     const dayData = byDay[date] || {income:0, expense:0};
     const div = document.createElement('div');
     div.className='calendar-day';
-    div.innerHTML = `<strong>${d}.${m}.${y}</strong> <span style="color:lightgreen">+${dayData.income}</span> <span style="color:salmon">-${dayData.expense}</span>`;
+    div.innerHTML = `<strong>${d}.${m}.${y}</strong> 
+      <span style="color:lightgreen">+${dayData.income}</span> 
+      <span style="color:salmon">-${dayData.expense}</span>`;
     container.appendChild(div);
   }
   monthInput.onchange = refreshCalendar;
+}
+
+// Chart.js – zarobki w 12 ostatnich miesiącach
+let monthlyChart = null;
+async function drawMonthlyChart(){
+  const ctx = document.getElementById('chart-monthly');
+  const txns = await getAll('txns');
+  const now = new Date();
+  const data = [];
+  const labels = [];
+  for(let i=11;i>=0;i--){
+    const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
+    const monthKey = d.toISOString().slice(0,7);
+    labels.push(d.toLocaleString('pl-PL',{month:'short'}));
+    const sum = txns.filter(t=>t.type==='income' && t.date.startsWith(monthKey))
+      .reduce((a,b)=>a+b.amount,0);
+    data.push(sum);
+  }
+  if(monthlyChart) monthlyChart.destroy();
+  monthlyChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Zarobki',
+        data,
+        backgroundColor: 'rgba(76, 175, 239, 0.7)'
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true } }
+    }
+  });
 }

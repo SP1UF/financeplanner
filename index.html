@@ -7,10 +7,11 @@
   <base href="./">
   <link rel="manifest" href="./manifest.json">
   <link rel="stylesheet" href="./styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <header>
-    <h1>Planer wydatków</h1>
+    <h1>Finance Planner</h1>
     <nav>
       <button id="nav-dashboard">Dashboard</button>
       <button id="nav-transactions">Transakcje</button>
@@ -20,40 +21,59 @@
   </header>
 
   <main>
+    <!-- Dashboard -->
     <section id="view-dashboard" class="view">
-      <h2>Podsumowanie</h2>
-      <div id="summary"></div>
+      <div class="card">
+        <h2>Podsumowanie</h2>
+        <div id="summary"></div>
+      </div>
+      <div class="card">
+        <h2>Wykres miesięczny</h2>
+        <canvas id="chart-monthly"></canvas>
+      </div>
     </section>
 
+    <!-- Transactions -->
     <section id="view-transactions" class="view">
-      <h2>Transakcje</h2>
-      <form id="transaction-form">
-        <input type="date" id="tx-date" required>
-        <input type="number" id="tx-amount" placeholder="Kwota" required>
-        <select id="tx-type">
-          <option value="income">Zarobek</option>
-          <option value="expense">Wydatek</option>
-        </select>
-        <input type="text" id="tx-note" placeholder="Notatka">
-        <button type="submit">Dodaj</button>
-      </form>
-      <ul id="tx-list"></ul>
+      <div class="card">
+        <h2>Dodaj transakcję</h2>
+        <form id="transaction-form" class="form">
+          <input type="date" id="tx-date" required>
+          <input type="number" id="tx-amount" placeholder="Kwota" required>
+          <select id="tx-type">
+            <option value="income">Zarobek</option>
+            <option value="expense">Wydatek</option>
+          </select>
+          <input type="text" id="tx-note" placeholder="Notatka">
+          <button type="submit">Dodaj</button>
+        </form>
+      </div>
+      <div class="card">
+        <h2>Historia transakcji</h2>
+        <ul id="tx-list"></ul>
+      </div>
     </section>
 
+    <!-- Calendar -->
     <section id="view-calendar" class="view">
-      <h2>Kalendarz</h2>
-      <label>Miesiąc: <input type="month" id="calendar-month"></label>
-      <div id="calendar-days"></div>
+      <div class="card">
+        <h2>Kalendarz</h2>
+        <label>Miesiąc: <input type="month" id="calendar-month"></label>
+        <div id="calendar-days"></div>
+      </div>
     </section>
 
+    <!-- Goals -->
     <section id="view-goals" class="view">
-      <h2>Cele</h2>
-      <form id="goal-form">
-        <input type="text" id="goal-name" placeholder="Nazwa celu" required>
-        <input type="number" id="goal-amount" placeholder="Kwota" required>
-        <button type="submit">Dodaj cel</button>
-      </form>
-      <ul id="goal-list"></ul>
+      <div class="card">
+        <h2>Cele</h2>
+        <form id="goal-form" class="form">
+          <input type="text" id="goal-name" placeholder="Nazwa celu" required>
+          <input type="number" id="goal-amount" placeholder="Kwota" required>
+          <button type="submit">Dodaj cel</button>
+        </form>
+        <ul id="goal-list"></ul>
+      </div>
     </section>
   </main>
 
