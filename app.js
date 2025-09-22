@@ -14,9 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // Dane użytkownika
   let incomes = Array(12).fill(0); // 12 miesięcy
   let bankBalance = 0;
-  let goals = []; // cele od zera
+  let goals = [];
 
-  // Funkcja formatująca kwotę
+  // Formatuje kwotę na PLN
   function formatPLN(value){
     return Number(value).toFixed(2).replace('.',',') + " PLN";
   }
@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const goalsContainer = document.getElementById('goals-charts-container');
   function refreshGoalsDashboard(){
     goalsContainer.innerHTML = '';
-    goals.forEach((g,i)=>{
+    goals.forEach((g)=>{
       const wrapper = document.createElement('div');
       wrapper.classList.add('goal-chart-wrapper');
       const label = document.createElement('span');
@@ -58,12 +58,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Dodawanie celów z dashboard
+  // Dodawanie celu z dashboard
   document.getElementById('add-goal-btn').addEventListener('click', ()=>{
     const name = prompt("Nazwa celu:");
     let amountInput = prompt("Kwota celu (np. 5000 lub 5000,50):");
     if(name && amountInput){
-      // Zamiana przecinka na kropkę i parsowanie
       amountInput = amountInput.replace(',', '.');
       const amount = parseFloat(amountInput);
       if(!isNaN(amount)){
@@ -90,7 +89,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Zapis i aktualizacja konta
     if(type==='income'){
       bankBalance += amount;
       const month = new Date(date).getMonth();
@@ -103,7 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     refreshBalance();
 
-    // Dodaj do listy
     const li = document.createElement('li');
     li.textContent = `${date} | ${type==='income'?'+':'-'}${formatPLN(amount)} | ${note}`;
     txList.appendChild(li);

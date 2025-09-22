@@ -31,7 +31,7 @@
     <section id="view-dashboard" class="view active">
       <div class="card">
         <h2>Stan konta bankowego</h2>
-        <div id="bank-balance">0 PLN</div>
+        <div id="bank-balance">0,00 PLN</div>
       </div>
 
       <div class="card">
@@ -52,7 +52,7 @@
         <h2>Dodaj transakcję</h2>
         <form id="transaction-form" class="form">
           <input type="date" id="tx-date" required>
-          <input type="number" id="tx-amount" placeholder="Kwota" required>
+          <input type="text" id="tx-amount" placeholder="Kwota (np. 5,50)" required>
           <select id="tx-type">
             <option value="income">Zarobek</option>
             <option value="expense">Wydatek</option>
@@ -83,7 +83,7 @@
         <ul id="goal-list"></ul>
         <form id="goal-form" class="form">
           <input type="text" id="goal-name" placeholder="Nazwa celu" required>
-          <input type="number" id="goal-amount" placeholder="Kwota" required>
+          <input type="text" id="goal-amount" placeholder="Kwota celu (np. 5000,50)" required>
           <button type="submit">Dodaj cel</button>
         </form>
       </div>
