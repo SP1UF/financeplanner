@@ -28,27 +28,6 @@
 
   <!-- Aplikacja -->
   <div id="app" style="display:none">
-    <!-- Górny pasek -->
-    <header class="topbar">
-      <button id="menu-toggle" class="menu-btn">☰</button>
-      <h1>Finance Planner</h1>
-    </header>
-
-    <!-- Wysuwane menu -->
-    <nav id="sidebar">
-      <button class="close-btn">×</button>
-      <ul>
-        <li><button class="nav-link" data-target="dashboard">🏠 Dashboard</button></li>
-        <li><button class="nav-link" data-target="transactions">💸 Transakcje</button></li>
-        <li><button class="nav-link" data-target="calendar">📅 Kalendarz</button></li>
-        <li><button class="nav-link" data-target="goals">🎯 Cele</button></li>
-      </ul>
-    </nav>
-
-    <!-- Overlay -->
-    <div id="overlay"></div>
-
-    <!-- Główna treść -->
     <main>
       <section id="view-dashboard" class="view active">
         <div class="card">
@@ -101,9 +80,18 @@
         </div>
       </section>
     </main>
+
+    <!-- Dolny pasek nawigacyjny -->
+    <nav class="bottom-nav">
+      <button class="nav-btn active" data-target="dashboard">🏠<span>Dashboard</span></button>
+      <button class="nav-btn" data-target="transactions">💸<span>Transakcje</span></button>
+      <button class="nav-btn" data-target="calendar">📅<span>Kalendarz</span></button>
+      <button class="nav-btn" data-target="goals">🎯<span>Cele</span></button>
+    </nav>
   </div>
 
   <script src="./db.js"></script>
   <script src="./app.js"></script>
 </body>
 </html>
+

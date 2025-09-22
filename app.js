@@ -1,4 +1,4 @@
-// Początkowe ustawienia PWA
+// PWA check
 if (window.navigator.standalone === true) {
   document.getElementById("app").style.display = "block";
 } else {
@@ -6,48 +6,23 @@ if (window.navigator.standalone === true) {
 }
 
 // =========================
-// Obsługa menu bocznego
+// Nawigacja dolna
 // =========================
 document.addEventListener("DOMContentLoaded", () => {
-  const sidebar = document.getElementById("sidebar");
-  const overlay = document.getElementById("overlay");
-  const menuToggle = document.getElementById("menu-toggle");
-  const closeBtn = document.querySelector("#sidebar .close-btn");
-
-  if (menuToggle && sidebar && overlay && closeBtn) {
-    // Otwórz menu
-    menuToggle.addEventListener("click", () => {
-      sidebar.classList.add("open");
-      overlay.classList.add("show");
-    });
-
-    // Zamknij menu (X)
-    closeBtn.addEventListener("click", () => {
-      sidebar.classList.remove("open");
-      overlay.classList.remove("show");
-    });
-
-    // Zamknij klikając overlay
-    overlay.addEventListener("click", () => {
-      sidebar.classList.remove("open");
-      overlay.classList.remove("show");
-    });
-  }
-
-  // Nawigacja między widokami
-  document.querySelectorAll(".nav-link").forEach((btn) => {
+  const navButtons = document.querySelectorAll(".nav-btn");
+  navButtons.forEach(btn => {
     btn.addEventListener("click", () => {
-      document.querySelectorAll(".view").forEach((v) => v.classList.remove("active"));
-      document.getElementById("view-" + btn.dataset.target).classList.add("active");
-
-      // Zamknij menu po wyborze
-      sidebar.classList.remove("open");
-      overlay.classList.remove("show");
+      // aktywne przyciski
+      navButtons.forEach(b=>b.classList.remove("active"));
+      btn.classList.add("active");
+      // widoki
+      const target = btn.dataset.target;
+      document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+      document.getElementById("view-" + target).classList.add("active");
     });
   });
 });
 
 // =========================
-// Tutaj dodajesz resztę logiki
-// transakcje, cele, wykresy itd.
+// Tutaj reszta logiki: transakcje, cele, kalendarz, wykres
 // =========================
