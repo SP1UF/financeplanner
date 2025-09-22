@@ -1,0 +1,47 @@
+:root{
+  --bg:#0f1724;
+  --panel:#0b1220;
+  --accent:#4f46e5;
+  --muted:#9aa4b2;
+  --card:#0e1a2b;
+  --danger:#ff5252;
+  --text:#e6eef6;
+}
+*{box-sizing:border-box;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Helvetica,Arial;}
+html,body,#app{height:100%}
+body{
+  margin:0;background:linear-gradient(180deg,#071027 0%, #071827 60%);color:var(--text);
+}
+.app{display:flex;height:100vh}
+.sidebar{
+  width:230px;padding:20px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+  border-right:1px solid rgba(255,255,255,0.03);
+}
+.sidebar h1{margin:0 0 12px;font-size:20px}
+.sidebar nav{display:flex;flex-direction:column;gap:8px}
+.sidebar button{
+  background:transparent;border:0;color:var(--muted);padding:10px;border-radius:8px;text-align:left;
+}
+.sidebar button.active, .sidebar button:hover{background:rgba(255,255,255,0.03);color:var(--text)}
+.sidebar .danger{color:var(--danger);margin-top:12px}
+.sidebar footer{margin-top:18px;color:var(--muted);font-size:12px}
+
+.main{flex:1;padding:18px;overflow:auto}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.balance{font-size:14px}
+#balance-amount{font-size:24px;font-weight:700}
+.cards{display:flex;gap:12px;margin-bottom:16px}
+.card{background:var(--card);padding:12px;border-radius:10px;flex:1;box-shadow:0 4px 10px rgba(2,6,23,0.6)}
+.list-compact{list-style:none;padding:0;margin:0;font-size:14px}
+.recent-section table, #txn-table{width:100%;border-collapse:collapse;background:transparent}
+.recent-section th, td{padding:8px;text-align:left;border-bottom:1px dashed rgba(255,255,255,0.03);font-size:13px}
+.form-inline{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.form-inline input, .form-inline select{padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--text)}
+.form-inline button{padding:8px 12px;border-radius:6px;border:0;background:var(--accent);color:white}
+.view{display:none}
+.view.active{display:block}
+.cards-vertical{display:flex;flex-direction:column;gap:8px}
+.goal-card{background:linear-gradient(90deg, rgba(255,255,255,0.02), transparent);padding:10px;border-radius:8px}
+.list{list-style:none;padding:0}
+.list li{padding:10px;border-radius:6px;background:rgba(255,255,255,0.02);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.small{font-size:12px;color:var(--muted)}
