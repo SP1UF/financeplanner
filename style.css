@@ -1,13 +1,12 @@
 /* =========================
    Kolory – tryb jasny/ciemny
-   ========================= */
+========================= */
 :root {
   --bg: #ffffff;
   --text: #222222;
   --card: #f8f8f8;
   --accent: #3b82f6;
 }
-
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #121212;
@@ -17,16 +16,12 @@
   }
 }
 
-/* =========================
-   Reset
-   ========================= */
+/* Reset */
 * { box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin:0; background:var(--bg); color:var(--text); }
+body { margin:0; font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background:var(--bg); color:var(--text); }
 
-/* =========================
-   Widoki i karty
-   ========================= */
-main { padding-bottom: 80px; } /* miejsce na dolny pasek */
+/* Widoki i karty */
+main { padding-bottom: 90px; }
 .view { display:none; padding:1rem; }
 .view.active { display:block; }
 
@@ -37,66 +32,37 @@ main { padding-bottom: 80px; } /* miejsce na dolny pasek */
   margin-bottom: 1.5rem;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
-.card h2 { font-size: 1.4rem; margin-bottom: 1rem; font-weight:600; }
+.card h2 { font-size: 1.6rem; margin-bottom: 1rem; font-weight:600; }
 
 /* Formularze */
-.form input,
-.form select,
-.form button {
+.form input, .form select, .form button {
   width: 100%;
-  padding: 0.9rem;
-  margin: 0.4rem 0;
+  padding: 1rem;
+  margin: 0.5rem 0;
   border-radius: 0.6rem;
   border: 1px solid #ccc;
-  font-size: 1rem;
+  font-size: 1.1rem;
 }
 .form button { background: var(--accent); color: #fff; border: none; cursor: pointer; font-weight:600; }
 .form button:hover { opacity:0.9; }
 
-/* Lista transakcji i celów */
+/* Lista */
 #tx-list, #goal-list { list-style:none; padding:0; margin:0; }
 #tx-list li, #goal-list li { padding:0.8rem; border-bottom:1px solid #ccc; font-size:1.1rem; }
 
 /* Instrukcja instalacji */
-.fullscreen {
-  position: fixed; top:0; left:0; right:0; bottom:0;
-  background: var(--bg); color: var(--text);
-  display:flex; align-items:center; justify-content:center; padding:20px; text-align:center;
-}
+.fullscreen { position: fixed; top:0; left:0; right:0; bottom:0; background: var(--bg); color: var(--text); display:flex; align-items:center; justify-content:center; padding:20px; text-align:center; }
 .fullscreen .card { max-width:400px; }
 
-/* =========================
-   Dolny pasek nawigacyjny
-   ========================= */
+/* Dolny pasek nawigacyjny */
 .bottom-nav {
-  position: fixed;
-  bottom:0; left:0; right:0;
-  height:70px;
-  background: var(--card);
-  display:flex;
-  border-top:1px solid #ccc;
-  z-index: 1000;
+  position: fixed; bottom:0; left:0; right:0; height:80px;
+  display:flex; background: var(--card); border-top:1px solid #ccc; z-index:1000;
 }
 
 .bottom-nav .nav-btn {
-  flex:1;
-  border:none;
-  background:none;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  font-size:1.2rem;
-  color: var(--text);
-  cursor:pointer;
-  transition: background 0.2s, color 0.2s;
+  flex:1; border:none; background:none; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  font-size:1.3rem; color: var(--text); cursor:pointer; font-weight:600; padding:0.3rem 0;
 }
 
-.bottom-nav .nav-btn span {
-  font-size:0.8rem;
-  margin-top:2px;
-}
-
-.bottom-nav .nav-btn.active {
-  color: var(--accent);
-}
+.bottom-nav .nav-btn.active { color: var(--accent); }

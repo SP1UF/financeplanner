@@ -4,94 +4,98 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Finance Planner</title>
-  <base href="./">
-  <link rel="manifest" href="./manifest.json">
+  <link rel="stylesheet" href="./styles.css">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-  <link rel="stylesheet" href="./styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <!-- Instrukcja dla Safari -->
-  <div id="install-instructions" class="fullscreen" style="display:none">
-    <div class="card">
-      <h2>Dodaj aplikację</h2>
-      <p>Aby korzystać z Finance Planner:</p>
-      <ol>
-        <li>Dotknij <strong>Udostępnij</strong> (ikona kwadratu ze strzałką w górę).</li>
-        <li>Wybierz <strong>Dodaj do ekranu początkowego</strong>.</li>
-        <li>Otwórz aplikację z nowej ikony.</li>
-      </ol>
-    </div>
+
+<!-- Instrukcja instalacji -->
+<div id="install-instructions" class="fullscreen" style="display:none">
+  <div class="card">
+    <h2>Dodaj aplikację</h2>
+    <p>Aby korzystać z Finance Planner:</p>
+    <ol>
+      <li>Dotknij <strong>Udostępnij</strong> (ikona kwadratu ze strzałką w górę).</li>
+      <li>Wybierz <strong>Dodaj do ekranu początkowego</strong>.</li>
+      <li>Otwórz aplikację z nowej ikony.</li>
+    </ol>
   </div>
+</div>
 
-  <!-- Aplikacja -->
-  <div id="app" style="display:none">
-    <main>
-      <section id="view-dashboard" class="view active">
-        <div class="card">
-          <h2>Podsumowanie</h2>
-          <div id="summary"></div>
-        </div>
-        <div class="card">
-          <h2>Wykres miesięczny</h2>
-          <canvas id="chart-monthly"></canvas>
-        </div>
-      </section>
+<!-- Aplikacja -->
+<div id="app" style="display:none">
+  <main>
+    <section id="view-dashboard" class="view active">
+      <div class="card">
+        <h2>Podsumowanie</h2>
+        <div id="summary"></div>
+      </div>
+      <div class="card">
+        <h2>Wykres miesięczny</h2>
+        <canvas id="chart-monthly"></canvas>
+      </div>
+    </section>
 
-      <section id="view-transactions" class="view">
-        <div class="card">
-          <h2>Dodaj transakcję</h2>
-          <form id="transaction-form" class="form">
-            <input type="date" id="tx-date" required>
-            <input type="number" id="tx-amount" placeholder="Kwota" required>
-            <select id="tx-type">
-              <option value="income">Zarobek</option>
-              <option value="expense">Wydatek</option>
-            </select>
-            <input type="text" id="tx-note" placeholder="Notatka">
-            <button type="submit">Dodaj</button>
-          </form>
-        </div>
-        <div class="card">
-          <h2>Historia transakcji</h2>
-          <ul id="tx-list"></ul>
-        </div>
-      </section>
+    <section id="view-transactions" class="view">
+      <div class="card">
+        <h2>Dodaj transakcję</h2>
+        <form id="transaction-form" class="form">
+          <input type="date" id="tx-date" required>
+          <input type="number" id="tx-amount" placeholder="Kwota" required>
+          <select id="tx-type">
+            <option value="income">Zarobek</option>
+            <option value="expense">Wydatek</option>
+          </select>
+          <input type="text" id="tx-note" placeholder="Notatka">
+          <button type="submit">Dodaj</button>
+        </form>
+      </div>
+      <div class="card">
+        <h2>Historia transakcji</h2>
+        <ul id="tx-list"></ul>
+      </div>
+    </section>
 
-      <section id="view-calendar" class="view">
-        <div class="card">
-          <h2>Kalendarz</h2>
-          <label>Miesiąc: <input type="month" id="calendar-month"></label>
-          <div id="calendar-days"></div>
-        </div>
-      </section>
+    <section id="view-calendar" class="view">
+      <div class="card">
+        <h2>Kalendarz</h2>
+        <label>Miesiąc: <input type="month" id="calendar-month"></label>
+        <div id="calendar-days"></div>
+      </div>
+    </section>
 
-      <section id="view-goals" class="view">
-        <div class="card">
-          <h2>Cele</h2>
-          <form id="goal-form" class="form">
-            <input type="text" id="goal-name" placeholder="Nazwa celu" required>
-            <input type="number" id="goal-amount" placeholder="Kwota" required>
-            <button type="submit">Dodaj cel</button>
-          </form>
-          <ul id="goal-list"></ul>
-        </div>
-      </section>
-    </main>
+    <section id="view-goals" class="view">
+      <div class="card">
+        <h2>Cele</h2>
+        <form id="goal-form" class="form">
+          <input type="text" id="goal-name" placeholder="Nazwa celu" required>
+          <input type="number" id="goal-amount" placeholder="Kwota" required>
+          <button type="submit">Dodaj cel</button>
+        </form>
+        <ul id="goal-list"></ul>
+      </div>
+    </section>
+  </main>
 
-    <!-- Dolny pasek nawigacyjny -->
-    <nav class="bottom-nav">
-      <button class="nav-btn active" data-target="dashboard">🏠<span>Dashboard</span></button>
-      <button class="nav-btn" data-target="transactions">💸<span>Transakcje</span></button>
-      <button class="nav-btn" data-target="calendar">📅<span>Kalendarz</span></button>
-      <button class="nav-btn" data-target="goals">🎯<span>Cele</span></button>
-    </nav>
-  </div>
+  <!-- Dolny pasek nawigacyjny -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-target="dashboard">Dashboard</button>
+    <button class="nav-btn" data-target="transactions">Transakcje</button>
+    <button class="nav-btn" data-target="calendar">Kalendarz</button>
+    <button class="nav-btn" data-target="goals">Cele</button>
+  </nav>
+</div>
 
-  <script src="./db.js"></script>
-  <script src="./app.js"></script>
+<script src="./app.js"></script>
+<script>
+  // PWA check
+  if (window.navigator.standalone === true) {
+    document.getElementById("app").style.display = "block";
+  } else {
+    document.getElementById("install-instructions").style.display = "flex";
+  }
+</script>
 </body>
 </html>
-
