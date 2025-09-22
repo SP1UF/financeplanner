@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Planer wydatków — Dashboard</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <h1>Planer</h1>
+      <nav>
+        <button id="nav-dashboard" class="active">Dashboard</button>
+        <button id="nav-daily">Dziennik</button>
+        <button id="nav-goals">Cele</button>
+        <button id="nav-scheduled">Zaplanowane</button>
+        <button id="nav-reports">Raport</button>
+        <hr />
+        <button id="clear-data" class="danger">Wyczyść dane</button>
+      </nav>
+      <footer>Offline • Local DB</footer>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="balance">
+          <div>Saldo</div>
+          <div id="balance-amount">0,00 zł</div>
+        </div>
+        <div class="today">
+          <div id="today-date"></div>
+        </div>
+      </header>
+
+      <section id="view-dashboard" class="view active">
+        <h2>Panel zarządzania</h2>
+        <div class="cards">
+          <div class="card">
+            <h3>Przychody dziś</h3>
+            <div id="today-income">0,00 zł</div>
+          </div>
+          <div class="card">
+            <h3>Wydatki dziś</h3>
+            <div id="today-expense">0,00 zł</div>
+          </div>
+          <div class="card">
+            <h3>Następne zaplanowane</h3>
+            <ul id="next-scheduled" class="list-compact"></ul>
+          </div>
+        </div>
+
+        <div class="recent-section">
+          <h3>Ostatnie transakcje</h3>
+          <table id="recent-table">
+            <thead><tr><th>Data</th><th>Typ</th><th>Kategoria</th><th>Kwota</th><th>Opis</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="view-daily" class="view">
+        <h2>Dziennik transakcji</h2>
+        <form id="txn-form" class="form-inline">
+          <input type="date" id="txn-date" required />
+          <select id="txn-type">
+            <option value="income">Przychód</option>
+            <option value="expense">Wydatek</option>
+          </select>
+          <input type="number" id="txn-amount" placeholder="Kwota" step="0.01" required />
+          <input type="text" id="txn-category" placeholder="Kategoria" />
+          <input type="text" id="txn-note" placeholder="Opis" />
+          <label><input type="checkbox" id="txn-scheduled" /> Zaplanowana</label>
+          <button type="submit">Dodaj</button>
+        </form>
+
+        <h3>Lista transakcji</h3>
+        <table id="txn-table">
+          <thead><tr><th>Data</th><th>Typ</th><th>Kwota</th><th>Kategoria</th><th>Akcje</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <section id="view-goals" class="view">
+        <h2>Cele</h2>
+        <form id="goal-form" class="form-inline">
+          <input type="text" id="goal-title" placeholder="Nazwa celu" required />
+          <input type="number" id="goal-target" placeholder="Kwota docelowa" step="0.01" required />
+          <button type="submit">Dodaj cel</button>
+        </form>
+
+        <div id="goals-list" class="cards-vertical"></div>
+      </section>
+
+      <section id="view-scheduled" class="view">
+        <h2>Zaplanowane transakcje</h2>
+        <ul id="scheduled-list" class="list"></ul>
+      </section>
+
+      <section id="view-reports" class="view">
+        <h2>Raport</h2>
+        <div id="report-summary"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="db.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
