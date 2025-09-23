@@ -1,52 +1,92 @@
-:root {
+:root{
   --bg: #ffffff;
-  --text: #222222;
-  --card: #f8f8f8;
-  --accent: #3b82f6;
+  --text: #111827;
+  --card: #f8fafc;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --danger:#ef4444;
+  --border:#e6e6e6;
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #121212;
-    --text: #f0f0f0;
-    --card: #1e1e1e;
-    --accent: #3b82f6;
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0b1220;
+    --text:#e6eef6;
+    --card:#0e1622;
+    --muted:#9aa4b2;
+    --accent:#60a5fa;
+    --danger:#ff6b6b;
+    --border: rgba(255,255,255,0.04);
   }
 }
 
-* { box-sizing:border-box; }
-body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); }
+/* reset */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
 
-main { padding-bottom:100px; }
-.view { display:none; padding:1rem; }
-.view.active { display:block; }
+/* main layout */
+main{padding:16px;padding-bottom:120px} /* leave space for bottom-nav */
 
-.card { background: var(--card); padding:1.5rem; border-radius:1rem; margin-bottom:1.5rem; box-shadow:0 2px 8px rgba(0,0,0,0.15); }
-.card h2 { font-size:1.6rem; margin-bottom:1rem; font-weight:600; }
+/* card */
+.card{background:var(--card);padding:16px;border-radius:12px;margin-bottom:14px;box-shadow:0 4px 14px rgba(2,6,23,0.35)}
+.card h2{margin:0 0 12px;font-size:18px;font-weight:700}
 
-#bank-balance { font-size:1.6rem; font-weight:600; margin-top:10px; }
+/* balances */
+.balances{display:flex;gap:12px;flex-wrap:wrap}
+.balance-item{flex:1;min-width:150px;background:transparent;padding:10px;border-radius:10px}
+.balance-item .label{font-size:13px;color:var(--muted)}
+.balance-item .amount{font-size:18px;font-weight:700;margin-top:6px}
 
-.form input, .form select, .form button {
-  width:100%;
-  padding:1rem;
-  margin:0.5rem 0;
-  border-radius:0.6rem;
-  border:1px solid #ccc;
-  font-size:1.1rem;
+/* lists & form */
+.list{list-style:none;padding:0;margin:0}
+.list li{padding:10px;border-bottom:1px solid var(--border);font-size:14px}
+.form input,.form select,.form button{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid var(--border);font-size:15px;background:transparent;color:var(--text)}
+.form button.primary{background:var(--accent);color:#fff;border:none}
+.form button.danger{background:var(--danger);color:#fff;border:none}
+
+/* goals charts container */
+#goals-charts-container{display:flex;flex-direction:column;gap:12px}
+.goal-chart-wrapper{display:flex;flex-direction:column;align-items:center}
+.goal-chart-wrapper canvas{width:120px !important;height:120px !important}
+.goal-chart-wrapper span{font-weight:600;margin-bottom:6px}
+
+/* install instruction fullscreen */
+.fullscreen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg);z-index:2000}
+.fullscreen .card{max-width:420px}
+
+/* BOTTOM NAV */
+.bottom-nav{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  height:78px;
+  display:flex;
+  gap:0;
+  padding-bottom:env(safe-area-inset-bottom,8px);
+  background:var(--card);
+  border-top:1px solid var(--border);
+  z-index:9999;
+  box-shadow: 0 -6px 20px rgba(2,6,23,0.25);
 }
-.form button { background:var(--accent); color:#fff; border:none; cursor:pointer; font-weight:600; }
-.form button:hover { opacity:0.9; }
+/* button inside nav */
+.bottom-nav .nav-btn{
+  flex:1;
+  border:0;
+  background:transparent;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  padding:8px 4px;
+  color:var(--muted);
+  cursor:pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.bottom-nav .nav-btn .icon{display:block;color:inherit}
+.bottom-nav .nav-btn .label{font-size:11px;line-height:12px}
+.bottom-nav .nav-btn.active{color:var(--accent);font-weight:700}
 
-#tx-list, #goal-list { list-style:none; padding:0; margin:0; }
-#tx-list li, #goal-list li { padding:0.8rem; border-bottom:1px solid #ccc; font-size:1.1rem; }
-
-.fullscreen { position:fixed; top:0; left:0; right:0; bottom:0; background:var(--bg); color:var(--text); display:flex; align-items:center; justify-content:center; padding:20px; text-align:center; }
-.fullscreen .card { max-width:400px; }
-
-.bottom-nav { position:fixed; bottom:0; left:0; right:0; height:90px; display:flex; background:var(--card); border-top:1px solid #ccc; z-index:1000; }
-.bottom-nav .nav-btn { flex:1; border:none; background:none; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:1.4rem; color:var(--text); cursor:pointer; font-weight:600; padding:0.5rem 0; }
-.bottom-nav .nav-btn.active { color:var(--accent); }
-
-#goals-charts-container { display:flex; flex-direction:column; gap:1rem; }
-.goal-chart-wrapper { display:flex; flex-direction:column; align-items:center; }
-.goal-chart-wrapper canvas { max-width:150px; }
-.goal-chart-wrapper span { margin-bottom:5px; font-weight:600; text-align:center; }
+/* ensure bottom nav stays fixed when keyboard opens: JS will keep forcing transform if necessary */
+#bottom-nav{transform:translateZ(0)}
