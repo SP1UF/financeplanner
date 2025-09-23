@@ -21,11 +21,13 @@ document.addEventListener("DOMContentLoaded", () => {
   fixViewportHeight();
 
   // 🔹 Dane użytkownika
-  let incomes = Array(12).fill(0); // 12 miesięcy
+  let incomes = Array(12).fill(0);
   let bankBalance = 0;
   let cashBalance = 0;
   let savingsBalance = 0;
-  let goals = []; // cele od zera
+  let goals = [];
+  let minIncome = null;
+  let payments = [];
 
   // 🔹 Formatowanie waluty
   function formatPLN(value){
@@ -129,6 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       refreshBalances();
+      refreshIncomeGoal();
 
       const li = document.createElement('li');
       li.textContent = `${date} | ${type==='income'?'+':'-'}${formatPLN(amount)} | ${note} [${source}]`;
@@ -138,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 🔹 Zakładka Cele (lista + wpłaty)
+  // 🔹 Zakładka Cele
   const goalsListEl = document.getElementById('goals-list');
   function refreshGoalsList(){
     if(!goalsListEl) return;
@@ -172,7 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 🔹 Zakładka Ustawienia (usuwanie celów)
+  // 🔹 Zakładka Ustawienia – lista celów do usunięcia
   const settingsGoalsList = document.createElement('div');
   function refreshGoalsSettings(){
     const settingsForm = document.getElementById('settings-form');
@@ -195,32 +198,88 @@ document.addEventListener("DOMContentLoaded", () => {
       div.appendChild(delBtn);
       settingsGoalsList.appendChild(div);
     });
-    if(!settingsForm.nextSibling || settingsForm.nextSibling!==settingsGoalsList){
-      settingsForm.insertAdjacentElement('afterend', settingsGoalsList);
+    if(!document.getElementById('settings-goals')){
+      settingsGoalsList.id = 'settings-goals';
+      settingsForm.parentElement.appendChild(settingsGoalsList);
     }
   }
 
-  // 🔹 Formularz ustawień – początkowe salda
+  // 🔹 Formularz ustawień
   const settingsForm = document.getElementById('settings-form');
   if(settingsForm){
     settingsForm.addEventListener('submit', e=>{
       e.preventDefault();
-      let bank = document.getElementById('init-bank').value.trim().replace(',', '.');
-      let cash = document.getElementById('init-cash').value.trim().replace(',', '.');
-      let savings = document.getElementById('init-savings').value.trim().replace(',', '.');
-
-      bankBalance = parseFloat(bank) || bankBalance;
-      cashBalance = parseFloat(cash) || cashBalance;
-      savingsBalance = parseFloat(savings) || savingsBalance;
-
+      let bankVal = parseFloat(settingsForm.querySelector('#init-bank').value.replace(',','.')) || 0;
+      let cashVal = parseFloat(settingsForm.querySelector('#init-cash').value.replace(',','.')) || 0;
+      let savingsVal = parseFloat(settingsForm.querySelector('#init-savings').value.replace(',','.')) || 0;
+      let minInc = parseFloat(settingsForm.querySelector('#min-income').value.replace(',','.'));
+      bankBalance = bankVal;
+      cashBalance = cashVal;
+      savingsBalance = savingsVal;
+      if(!isNaN(minInc)) minIncome = minInc;
       refreshBalances();
-      alert("Salda zostały zaktualizowane!");
+      refreshIncomeGoal();
+      alert("Zapisano ustawienia!");
+    });
+  }
+
+  // 🔹 Status minimalnego zarobku
+  const incomeGoalStatusEl = document.getElementById("income-goal-status");
+  function refreshIncomeGoal(){
+    if(!incomeGoalStatusEl) return;
+    if(!minIncome){
+      incomeGoalStatusEl.textContent = "Brak ustawionego celu.";
+      return;
+    }
+    const month = new Date().getMonth();
+    const earned = incomes[month];
+    const remaining = minIncome - earned;
+    if(remaining > 0){
+      incomeGoalStatusEl.textContent = `Do celu brakuje: ${formatPLN(remaining)}`;
+    } else {
+      incomeGoalStatusEl.textContent = `Cel osiągnięty! (+${formatPLN(Math.abs(remaining))})`;
+    }
+  }
+
+  // 🔹 Nadchodzące płatności
+  const paymentsListEl = document.getElementById("upcoming-payments");
+  function refreshPayments(){
+    if(!paymentsListEl) return;
+    paymentsListEl.innerHTML = "";
+    payments.forEach(p=>{
+      const today = new Date();
+      const payDate = new Date(p.date);
+      const diffTime = payDate - today;
+      const daysLeft = Math.ceil(diffTime / (1000*60*60*24));
+      const li = document.createElement("li");
+      li.textContent = `${p.name} – ${daysLeft} dni – ${formatPLN(p.amount)} (${p.source})`;
+      paymentsListEl.appendChild(li);
+    });
+  }
+
+  const paymentForm = document.getElementById("payment-form");
+  if(paymentForm){
+    paymentForm.addEventListener("submit", e=>{
+      e.preventDefault();
+      let name = document.getElementById("payment-name").value;
+      let amount = document.getElementById("payment-amount").value.replace(",",".");
+      let date = document.getElementById("payment-date").value;
+      let source = document.getElementById("payment-source").value;
+      let parsed = parseFloat(amount);
+
+      if(!name || isNaN(parsed) || !date){
+        alert("Podaj poprawne dane płatności.");
+        return;
+      }
+      payments.push({name, amount:parsed, date, source});
+      refreshPayments();
+      paymentForm.reset();
     });
   }
 
   // 🔹 Inicjalizacja
   refreshBalances();
   refreshGoalsDashboard();
-  refreshGoalsList();
-  refreshGoalsSettings();
+  refreshIncomeGoal();
+  refreshPayments();
 });

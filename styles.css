@@ -1,99 +1,83 @@
 :root {
-  --bg: #f8f9fa;
+  color-scheme: light dark;
+  --bg: #f9f9f9;
   --text: #111;
-  --text-secondary: #555;
   --card-bg: #fff;
-  --border: #ddd;
-  --accent: #3b82f6;
+  --primary: #3b82f6;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0d1117;
-    --text: #f0f0f0;
-    --text-secondary: #aaa;
-    --card-bg: #161b22;
-    --border: #30363d;
-    --accent: #3b82f6;
+    --bg: #111;
+    --text: #f9f9f9;
+    --card-bg: #1e1e1e;
+    --primary: #3b82f6;
   }
 }
 
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
+  font-family: sans-serif;
   background: var(--bg);
   color: var(--text);
-  height: 100%;
-  overflow-x: hidden;
-}
-
-h1, h2, h3 {
-  margin: 0 0 10px;
+  padding-bottom: 70px; /* miejsce na dolną nawigację */
 }
 
 .container {
-  padding: 16px;
+  padding: 1rem;
+}
+
+h2, h3 {
+  margin-top: 0.5rem;
 }
 
 .card {
   background: var(--card-bg);
-  border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.view {
-  display: none;
-  min-height: calc(var(--vh, 1vh) * 100 - 70px); /* 70px = bottom-nav height */
-  padding: 16px;
-  padding-bottom: 90px; /* extra space for nav */
-}
-
-.view.active {
-  display: block;
-}
-
-/* Formularze */
 .form input, .form select, .form button {
+  display: block;
   width: 100%;
-  padding: 10px;
-  margin-bottom: 12px;
+  margin-bottom: 0.5rem;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
   border-radius: 8px;
-  border: 1px solid var(--border);
-  font-size: 16px;
-  background: var(--card-bg);
-  color: var(--text);
+  font-size: 1rem;
 }
 
 .form button {
-  background: var(--accent);
+  background: var(--primary);
   color: #fff;
   border: none;
-  cursor: pointer;
-  font-weight: 600;
 }
 
-/* Listy */
-ul {
+#tx-list, #goals-list, #upcoming-payments {
   list-style: none;
   padding: 0;
 }
 
-li {
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-/* Cele */
-.goal-chart-wrapper {
+.goal-item, .goal-settings-item {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  margin: 20px;
+  padding: 0.4rem 0;
 }
 
-/* Dolny pasek nawigacyjny */
+.goal-item button, .goal-settings-item button {
+  margin-left: 0.5rem;
+}
+
+.goal-chart-wrapper {
+  display: inline-block;
+  width: 120px;
+  text-align: center;
+  margin: 0.5rem;
+}
+
 .bottom-nav {
   position: fixed;
   bottom: 0;
@@ -101,35 +85,31 @@ li {
   right: 0;
   height: 70px;
   background: var(--card-bg);
-  border-top: 1px solid var(--border);
   display: flex;
   justify-content: space-around;
-  align-items: center;
-  padding-bottom: env(safe-area-inset-bottom, 0);
-  z-index: 9999;
+  border-top: 1px solid #ccc;
 }
 
-.bottom-nav button {
+.nav-btn {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 12px;
-  color: var(--text-secondary);
   background: none;
   border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 6px 0;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.bottom-nav button .icon {
-  font-size: 20px;
-  margin-bottom: 3px;
+.nav-btn.active {
+  color: var(--primary);
+  font-weight: bold;
 }
 
-.bottom-nav button.active {
-  color: var(--accent);
-  font-weight: 600;
+.nav-btn .icon {
+  font-size: 1.5rem;
 }
+
+.view { display: none; }
+.view.active { display: block; }

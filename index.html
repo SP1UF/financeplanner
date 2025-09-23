@@ -8,6 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+  <!-- DASHBOARD -->
   <div id="view-dashboard" class="view active">
     <div class="container">
       <h2>Dashboard</h2>
@@ -26,9 +27,18 @@
         <div id="goals-charts-container"></div>
         <button id="add-goal-btn">Dodaj cel</button>
       </div>
+      <div class="card">
+        <h3>Minimalny zarobek miesięczny</h3>
+        <p id="income-goal-status">Brak ustawionego celu.</p>
+      </div>
+      <div class="card">
+        <h3>Nadchodzące płatności</h3>
+        <ul id="upcoming-payments"></ul>
+      </div>
     </div>
   </div>
 
+  <!-- TRANSAKCJE -->
   <div id="view-transactions" class="view">
     <div class="container">
       <h2>Transakcje</h2>
@@ -51,6 +61,7 @@
     </div>
   </div>
 
+  <!-- CELE -->
   <div id="view-goals" class="view">
     <div class="container">
       <h2>Cele</h2>
@@ -58,6 +69,7 @@
     </div>
   </div>
 
+  <!-- USTAWIENIA -->
   <div id="view-settings" class="view">
     <div class="container">
       <h2>Ustawienia</h2>
@@ -68,12 +80,26 @@
         <input type="text" id="init-cash" placeholder="np. 500,00">
         <label>Początkowe saldo oszczędności:</label>
         <input type="text" id="init-savings" placeholder="np. 200,00">
+        <label>Minimalny zarobek miesięczny:</label>
+        <input type="text" id="min-income" placeholder="np. 3000,00">
         <button type="submit">Zapisz</button>
+      </form>
+
+      <h3>Dodaj płatność</h3>
+      <form id="payment-form" class="form">
+        <input type="text" id="payment-name" placeholder="Nazwa (np. Czynsz)" required>
+        <input type="text" id="payment-amount" placeholder="Kwota (np. 1200,00)" required>
+        <input type="date" id="payment-date" required>
+        <select id="payment-source">
+          <option value="bank">Konto bankowe</option>
+          <option value="cash">Gotówka</option>
+        </select>
+        <button type="submit">Dodaj płatność</button>
       </form>
     </div>
   </div>
 
-  <!-- Dolny pasek nawigacyjny -->
+  <!-- DOLNA NAWIGACJA -->
   <nav class="bottom-nav">
     <button class="nav-btn active" data-target="dashboard">
       <span class="icon">🏠</span>
