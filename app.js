@@ -12,18 +12,26 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Dane użytkownika
-  let incomes = Array(12).fill(0); // 12 miesięcy
+  let incomes = Array(12).fill(0);
   let bankBalance = 0;
+  let cashBalance = 0;
+  let savingsBalance = 0;
   let goals = [];
 
-  // Formatuje kwotę na PLN
+  // Formatowanie kwot
   function formatPLN(value){
     return Number(value).toFixed(2).replace('.',',') + " PLN";
   }
 
-  // Stan konta
-  const balanceEl = document.getElementById('bank-balance');
-  function refreshBalance() { balanceEl.textContent = formatPLN(bankBalance); }
+  // Odświeżenie wyświetlanych sald
+  const bankEl = document.getElementById('bank-balance');
+  const cashEl = document.getElementById('cash-balance');
+  const savingsEl = document.getElementById('savings-balance');
+  function refreshBalances(){
+    bankEl.textContent = formatPLN(bankBalance);
+    cashEl.textContent = formatPLN(cashBalance);
+    savingsEl.textContent = formatPLN(savingsBalance);
+  }
 
   // Wykres zarobków
   const incomeCtx = document.getElementById('income-chart').getContext('2d');
@@ -82,6 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
     amountInput = amountInput.replace(',', '.');
     const amount = parseFloat(amountInput);
     const type = document.getElementById('tx-type').value;
+    const source = document.getElementById('tx-source').value;
     const note = document.getElementById('tx-note').value;
 
     if(isNaN(amount)){
@@ -89,25 +98,31 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    if(type==='income'){
-      bankBalance += amount;
+    // Aktualizacja źródła
+    if(type === 'income'){
+      if(source === 'bank') bankBalance += amount;
+      if(source === 'cash') cashBalance += amount;
+      if(source === 'savings') savingsBalance += amount;
       const month = new Date(date).getMonth();
       incomes[month] += amount;
       incomeChart.data.datasets[0].data[month] = incomes[month];
       incomeChart.update();
     } else {
-      bankBalance -= amount;
+      if(source === 'bank') bankBalance -= amount;
+      if(source === 'cash') cashBalance -= amount;
+      if(source === 'savings') savingsBalance -= amount;
     }
 
-    refreshBalance();
+    refreshBalances();
 
+    // Dodanie do listy transakcji
     const li = document.createElement('li');
-    li.textContent = `${date} | ${type==='income'?'+':'-'}${formatPLN(amount)} | ${note}`;
+    li.textContent = `${date} | ${type==='income'?'+':'-'}${formatPLN(amount)} | ${note} [${source}]`;
     txList.appendChild(li);
 
     txForm.reset();
   });
 
-  refreshBalance();
+  refreshBalances();
   refreshGoalsDashboard();
 });

@@ -3,10 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="apple-touch-icon" sizes="180x180" href="#">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="FinancePlanner">
   <title>Finance Planner</title>
   <link rel="stylesheet" href="./styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -34,8 +30,12 @@
     <!-- Dashboard -->
     <section id="view-dashboard" class="view active">
       <div class="card">
-        <h2>Stan konta bankowego</h2>
-        <div id="bank-balance">0,00 PLN</div>
+        <h2>Stan kont</h2>
+        <div id="balances">
+          <p>🏦 Konto bankowe: <span id="bank-balance">0,00 PLN</span></p>
+          <p>💵 Gotówka: <span id="cash-balance">0,00 PLN</span></p>
+          <p>💰 Oszczędności: <span id="savings-balance">0,00 PLN</span></p>
+        </div>
       </div>
 
       <div class="card">
@@ -60,6 +60,11 @@
           <select id="tx-type">
             <option value="income">Zarobek</option>
             <option value="expense">Wydatek</option>
+          </select>
+          <select id="tx-source">
+            <option value="bank">Konto bankowe</option>
+            <option value="cash">Gotówka</option>
+            <option value="savings">Oszczędności</option>
           </select>
           <input type="text" id="tx-note" placeholder="Notatka">
           <button type="submit">Dodaj</button>
