@@ -1,7 +1,7 @@
 :root {
   --bg: #f8f9fa;
   --text: #111;
-  --text-secondary: #666;
+  --text-secondary: #555;
   --card-bg: #fff;
   --border: #ddd;
   --accent: #3b82f6;
@@ -9,66 +9,88 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #111;
-    --text: #f8f9fa;
+    --bg: #0d1117;
+    --text: #f0f0f0;
     --text-secondary: #aaa;
-    --card-bg: #1c1c1e;
-    --border: #333;
+    --card-bg: #161b22;
+    --border: #30363d;
     --accent: #3b82f6;
   }
 }
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: system-ui, sans-serif;
   background: var(--bg);
   color: var(--text);
-  -webkit-tap-highlight-color: transparent;
+  height: 100%;
+  overflow-x: hidden;
 }
 
-#app {
-  padding-bottom: 80px; /* miejsce na bottom-nav */
+h1, h2, h3 {
+  margin: 0 0 10px;
 }
 
-.view {
-  display: none;
-  padding: 20px;
-}
-
-.view.active {
-  display: block;
+.container {
+  padding: 16px;
 }
 
 .card {
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 15px;
-  margin-bottom: 15px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 16px;
+  margin-bottom: 16px;
 }
 
-.form input,
-.form select,
-.form button {
+.view {
+  display: none;
+  min-height: calc(var(--vh, 1vh) * 100 - 70px); /* 70px = bottom-nav height */
+  padding: 16px;
+  padding-bottom: 90px; /* extra space for nav */
+}
+
+.view.active {
+  display: block;
+}
+
+/* Formularze */
+.form input, .form select, .form button {
   width: 100%;
-  padding: 12px;
-  margin: 8px 0;
+  padding: 10px;
+  margin-bottom: 12px;
   border-radius: 8px;
   border: 1px solid var(--border);
   font-size: 16px;
+  background: var(--card-bg);
+  color: var(--text);
 }
 
 .form button {
   background: var(--accent);
-  color: white;
-  font-weight: bold;
+  color: #fff;
   border: none;
   cursor: pointer;
+  font-weight: 600;
 }
 
-.form button:hover {
-  opacity: 0.9;
+/* Listy */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Cele */
+.goal-chart-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
 }
 
 /* Dolny pasek nawigacyjny */
@@ -99,10 +121,11 @@ body {
   border: none;
   outline: none;
   cursor: pointer;
+  padding: 6px 0;
 }
 
 .bottom-nav button .icon {
-  font-size: 22px;
+  font-size: 20px;
   margin-bottom: 3px;
 }
 
