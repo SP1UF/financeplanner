@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const target = btn.dataset.target;
       document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
       document.getElementById("view-" + target).classList.add("active");
+      if(target === "settings") refreshGoalsSettings();
+      if(target === "goals") refreshGoalsList();
     });
   });
 
@@ -86,6 +88,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if(!isNaN(amount)){
           goals.push({name:name, amount:amount, saved:0});
           refreshGoalsDashboard();
+          refreshGoalsList();
+          refreshGoalsSettings();
         } else { alert("Nieprawidłowa kwota."); }
       }
     });
@@ -102,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
       amountInput = amountInput.replace(',', '.');
       const amount = parseFloat(amountInput);
       const type = document.getElementById('tx-type').value;
-      const source = document.getElementById('tx-source').value; // konto, gotówka, oszczędności
+      const source = document.getElementById('tx-source').value;
       const note = document.getElementById('tx-note').value;
 
       if(isNaN(amount)){
@@ -110,7 +114,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // 🔹 Zapis i aktualizacja konta/gotówki/oszczędności
       if(type==='income'){
         if(source==='bank') bankBalance += amount;
         if(source==='cash') cashBalance += amount;
@@ -127,13 +130,74 @@ document.addEventListener("DOMContentLoaded", () => {
 
       refreshBalances();
 
-      // 🔹 Dodaj do listy
       const li = document.createElement('li');
       li.textContent = `${date} | ${type==='income'?'+':'-'}${formatPLN(amount)} | ${note} [${source}]`;
       txList.appendChild(li);
 
       txForm.reset();
     });
+  }
+
+  // 🔹 Zakładka Cele (lista + wpłaty)
+  const goalsListEl = document.getElementById('goals-list');
+  function refreshGoalsList(){
+    if(!goalsListEl) return;
+    goalsListEl.innerHTML = '';
+    goals.forEach((g,i)=>{
+      const div = document.createElement('div');
+      div.classList.add('goal-item');
+      div.innerHTML = `<strong>${g.name}</strong> (${formatPLN(g.saved)} / ${formatPLN(g.amount)})`;
+      const payBtn = document.createElement('button');
+      payBtn.textContent = "Wpłać";
+      payBtn.addEventListener('click', ()=>{
+        let amountInput = prompt("Kwota wpłaty:");
+        if(amountInput){
+          amountInput = amountInput.replace(',', '.');
+          const amount = parseFloat(amountInput);
+          if(!isNaN(amount)){
+            const source = prompt("Źródło (bank/cash/savings):");
+            if(source==='bank' && bankBalance>=amount){ bankBalance-=amount; g.saved+=amount; }
+            else if(source==='cash' && cashBalance>=amount){ cashBalance-=amount; g.saved+=amount; }
+            else if(source==='savings' && savingsBalance>=amount){ savingsBalance-=amount; g.saved+=amount; }
+            else { alert("Nieprawidłowe źródło lub brak środków."); return; }
+            refreshBalances();
+            refreshGoalsDashboard();
+            refreshGoalsList();
+            refreshGoalsSettings();
+          } else { alert("Nieprawidłowa kwota."); }
+        }
+      });
+      div.appendChild(payBtn);
+      goalsListEl.appendChild(div);
+    });
+  }
+
+  // 🔹 Zakładka Ustawienia (usuwanie celów)
+  const settingsGoalsList = document.createElement('div');
+  function refreshGoalsSettings(){
+    const settingsForm = document.getElementById('settings-form');
+    if(!settingsForm) return;
+    settingsGoalsList.innerHTML = "<h3>Twoje cele:</h3>";
+    goals.forEach((g,i)=>{
+      const div = document.createElement('div');
+      div.classList.add('goal-settings-item');
+      div.textContent = `${g.name} (${formatPLN(g.amount)})`;
+      const delBtn = document.createElement('button');
+      delBtn.textContent = "❌";
+      delBtn.addEventListener('click', ()=>{
+        if(confirm(`Usunąć cel "${g.name}"?`)){
+          goals.splice(i,1);
+          refreshGoalsDashboard();
+          refreshGoalsList();
+          refreshGoalsSettings();
+        }
+      });
+      div.appendChild(delBtn);
+      settingsGoalsList.appendChild(div);
+    });
+    if(!settingsForm.nextSibling || settingsForm.nextSibling!==settingsGoalsList){
+      settingsForm.insertAdjacentElement('afterend', settingsGoalsList);
+    }
   }
 
   // 🔹 Formularz ustawień – początkowe salda
@@ -157,4 +221,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🔹 Inicjalizacja
   refreshBalances();
   refreshGoalsDashboard();
+  refreshGoalsList();
+  refreshGoalsSettings();
 });
