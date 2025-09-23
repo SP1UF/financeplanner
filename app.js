@@ -136,6 +136,25 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // 🔹 Formularz ustawień – początkowe salda
+  const settingsForm = document.getElementById('settings-form');
+  if(settingsForm){
+    settingsForm.addEventListener('submit', e=>{
+      e.preventDefault();
+      let bank = document.getElementById('init-bank').value.trim().replace(',', '.');
+      let cash = document.getElementById('init-cash').value.trim().replace(',', '.');
+      let savings = document.getElementById('init-savings').value.trim().replace(',', '.');
+
+      bankBalance = parseFloat(bank) || bankBalance;
+      cashBalance = parseFloat(cash) || cashBalance;
+      savingsBalance = parseFloat(savings) || savingsBalance;
+
+      refreshBalances();
+      alert("Salda zostały zaktualizowane!");
+    });
+  }
+
+  // 🔹 Inicjalizacja
   refreshBalances();
   refreshGoalsDashboard();
 });
