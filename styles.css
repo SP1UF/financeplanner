@@ -31,7 +31,6 @@ h2, h3 {
   margin-top: 0.5rem;
 }
 
-/* Karty */
 .card {
   background: var(--card-bg);
   border-radius: 12px;
@@ -40,7 +39,6 @@ h2, h3 {
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-/* Formularze */
 .form input,
 .form select,
 .form button {
@@ -68,14 +66,12 @@ h2, h3 {
   max-width: 400px;
 }
 
-/* Listy */
 ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-/* Dolna nawigacja */
 .bottom-nav {
   position: fixed;
   bottom: 0;
@@ -110,7 +106,6 @@ ul {
   font-size: 1.5rem;
 }
 
-/* Widoki */
 .view {
   display: none;
 }
@@ -119,14 +114,17 @@ ul {
   display: block;
 }
 
-/* Wykresy */
 canvas {
   max-width: 100%;
 }
 
-/* Scroll */
 .card ul {
   max-height: 150px;
   overflow-y: auto;
   padding-right: 0.5rem;
+}
+
+/* Większe odstępy w ustawieniach */
+.settings-section {
+  margin-bottom: 2rem;
 }

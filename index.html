@@ -9,6 +9,7 @@
 </head>
 <body>
   <div class="container">
+
     <!-- Dashboard -->
     <div id="dashboard" class="view active">
       <h2>Dashboard</h2>
@@ -87,12 +88,29 @@
     <!-- Ustawienia -->
     <div id="settings" class="view">
       <h2>Ustawienia</h2>
-      <form id="settingsForm" class="form">
-        <label>Minimalny miesięczny zarobek (PLN):</label>
-        <input type="text" id="minIncome">
-        <button type="submit">Zapisz</button>
-      </form>
-      <div class="card">
+
+      <div class="settings-section">
+        <form id="settingsForm" class="form">
+          <label>Minimalny miesięczny zarobek (PLN):</label>
+          <input type="text" id="minIncome">
+          <button type="submit">Zapisz</button>
+        </form>
+      </div>
+
+      <div class="settings-section">
+        <h3>Początkowe saldo</h3>
+        <form id="initialBalanceForm" class="form">
+          <label>Konto bankowe:</label>
+          <input type="text" id="initialBank" placeholder="0">
+          <label>Gotówka:</label>
+          <input type="text" id="initialCash" placeholder="0">
+          <label>Oszczędności:</label>
+          <input type="text" id="initialSavings" placeholder="0">
+          <button type="submit">Zapisz saldo</button>
+        </form>
+      </div>
+
+      <div class="settings-section">
         <h3>Dni wypłat</h3>
         <form id="payoutForm" class="form">
           <label>Dzień miesiąca:</label>
@@ -102,6 +120,7 @@
         <ul id="payoutList"></ul>
       </div>
     </div>
+
   </div>
 
   <!-- Nawigacja -->
@@ -121,8 +140,8 @@
   </nav>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="app.js"></script>
   <script src="db.js"></script>
+  <script src="app.js"></script>
   <script>
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("sw.js");
