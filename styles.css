@@ -23,10 +23,15 @@ body {
   padding-bottom: 70px;
 }
 
-.container { padding: 1rem; }
+.container {
+  padding: 1rem;
+}
 
-h2,h3 { margin-top:0.5rem; }
+h2, h3 {
+  margin-top: 0.5rem;
+}
 
+/* Karty */
 .card {
   background: var(--card-bg);
   border-radius: 12px;
@@ -35,43 +40,93 @@ h2,h3 { margin-top:0.5rem; }
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.form input, .form select, .form button {
+/* Formularze */
+.form input,
+.form select,
+.form button {
   display: block;
-  width: 100%;
-  margin-bottom: 0.5rem;
+  width: 90%;            /* zmniejszona szerokość */
+  max-width: 400px;      /* ograniczenie szerokości */
+  margin: 0.3rem auto;   /* wyśrodkowanie i odstęp */
   padding: 0.6rem;
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 1rem;
+  box-sizing: border-box;
 }
 
 .form button {
   background: var(--primary);
   color: #fff;
   border: none;
+  cursor: pointer;
 }
 
-ul { list-style:none; padding:0; }
+.form label {
+  display: block;
+  margin: 0.5rem auto 0.2rem auto;
+  max-width: 400px;
+}
 
+/* Listy */
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Dolna nawigacja */
 .bottom-nav {
   position: fixed;
-  bottom: 0; left: 0; right: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   height: 70px;
   background: var(--card-bg);
   display: flex;
   justify-content: space-around;
   border-top: 1px solid #ccc;
+  z-index: 1000;
 }
 
 .nav-btn {
-  flex:1; background:none; border:none;
-  padding:0.5rem; font-size:0.8rem;
-  color: var(--text); display:flex;
-  flex-direction:column; align-items:center;
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.nav-btn.active { color: var(--primary); font-weight:bold; }
-.nav-btn .icon { font-size:1.5rem; }
+.nav-btn.active {
+  color: var(--primary);
+  font-weight: bold;
+}
 
-.view { display:none; }
-.view.active { display:block; }
+.nav-btn .icon {
+  font-size: 1.5rem;
+}
+
+/* Widoki */
+.view {
+  display: none;
+}
+
+.view.active {
+  display: block;
+}
+
+/* Wykresy */
+canvas {
+  max-width: 100%;
+}
+
+/* Scroll dla list płatności/ transakcji */
+.card ul {
+  max-height: 150px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
