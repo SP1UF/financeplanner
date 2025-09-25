@@ -2,125 +2,131 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Finance Planner</title>
   <link rel="stylesheet" href="styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <!-- DASHBOARD -->
-  <div id="view-dashboard" class="view active">
-    <div class="container">
+  <div class="container">
+    <!-- Dashboard -->
+    <div id="dashboard" class="view active">
       <h2>Dashboard</h2>
       <div class="card">
         <h3>Stan kont</h3>
-        <p>Konto bankowe: <span id="bank-balance">0,00 PLN</span></p>
-        <p>Gotówka: <span id="cash-balance">0,00 PLN</span></p>
-        <p>Oszczędności: <span id="savings-balance">0,00 PLN</span></p>
+        <p id="bankBalance">Konto bankowe: 0 PLN</p>
+        <p id="cashBalance">Gotówka: 0 PLN</p>
+        <p id="savingsBalance">Oszczędności: 0 PLN</p>
       </div>
       <div class="card">
-        <h3>Zarobki miesięczne</h3>
-        <canvas id="income-chart" height="120"></canvas>
+        <h3>Wykres zarobków</h3>
+        <canvas id="incomeChart"></canvas>
       </div>
       <div class="card">
-        <h3>Minimalny zarobek miesięczny</h3>
-        <p id="income-goal-status">Brak ustawionego celu.</p>
+        <h3>Minimalny planowany zarobek</h3>
+        <p id="minIncomeStatus"></p>
       </div>
       <div class="card">
         <h3>Nadchodzące płatności</h3>
-        <ul id="upcoming-payments"></ul>
+        <ul id="upcomingPayments"></ul>
       </div>
       <div class="card">
-        <h3>Płatności zaplanowane</h3>
-        <ul id="recurring-payments"></ul>
+        <h3>Nadchodzące wypłaty</h3>
+        <ul id="upcomingPayouts"></ul>
       </div>
     </div>
-  </div>
 
-  <!-- TRANSAKCJE -->
-  <div id="view-transactions" class="view">
-    <div class="container">
+    <!-- Transakcje -->
+    <div id="transactions" class="view">
       <h2>Transakcje</h2>
-      <form id="transaction-form" class="form">
-        <input type="date" id="tx-date" required>
-        <input type="text" id="tx-amount" placeholder="Kwota (np. 5,50)" required>
-        <select id="tx-type">
+      <form id="transactionForm" class="form">
+        <label>Kwota:</label>
+        <input type="text" id="amount" required>
+        <label>Typ:</label>
+        <select id="type">
           <option value="income">Zarobek</option>
           <option value="expense">Wydatek</option>
         </select>
-        <select id="tx-source">
+        <label>Konto:</label>
+        <select id="account">
           <option value="bank">Konto bankowe</option>
           <option value="cash">Gotówka</option>
           <option value="savings">Oszczędności</option>
         </select>
-        <input type="text" id="tx-note" placeholder="Notatka">
         <button type="submit">Dodaj</button>
       </form>
-      <ul id="tx-list"></ul>
+      <div class="card">
+        <h3>Historia</h3>
+        <ul id="transactionList"></ul>
+      </div>
     </div>
-  </div>
 
-  <!-- USTAWIENIA -->
-  <div id="view-settings" class="view">
-    <div class="container">
+    <!-- Płatności -->
+    <div id="payments" class="view">
+      <h2>Płatności zaplanowane</h2>
+      <form id="paymentForm" class="form">
+        <label>Nazwa:</label>
+        <input type="text" id="paymentName" required>
+        <label>Kwota:</label>
+        <input type="text" id="paymentAmount" required>
+        <label>Data (YYYY-MM-DD):</label>
+        <input type="date" id="paymentDate" required>
+        <label>Konto:</label>
+        <select id="paymentAccount">
+          <option value="bank">Konto bankowe</option>
+          <option value="cash">Gotówka</option>
+        </select>
+        <button type="submit">Dodaj</button>
+      </form>
+      <div class="card">
+        <h3>Lista płatności</h3>
+        <ul id="paymentList"></ul>
+      </div>
+    </div>
+
+    <!-- Ustawienia -->
+    <div id="settings" class="view">
       <h2>Ustawienia</h2>
-      <form id="settings-form" class="form">
-        <label>Początkowe saldo konta bankowego:</label>
-        <input type="text" id="init-bank" placeholder="np. 1000,00">
-        <label>Początkowe saldo gotówki:</label>
-        <input type="text" id="init-cash" placeholder="np. 500,00">
-        <label>Początkowe saldo oszczędności:</label>
-        <input type="text" id="init-savings" placeholder="np. 200,00">
-        <label>Minimalny zarobek miesięczny:</label>
-        <input type="text" id="min-income" placeholder="np. 3000,00">
+      <form id="settingsForm" class="form">
+        <label>Minimalny miesięczny zarobek (PLN):</label>
+        <input type="text" id="minIncome">
         <button type="submit">Zapisz</button>
       </form>
-
-      <h3>Dodaj nadchodzącą płatność</h3>
-      <form id="payment-form" class="form">
-        <input type="text" id="payment-name" placeholder="Nazwa (np. Czynsz)" required>
-        <input type="text" id="payment-amount" placeholder="Kwota (np. 1200,00)" required>
-        <input type="date" id="payment-date" required>
-        <select id="payment-source">
-          <option value="bank">Konto bankowe</option>
-          <option value="cash">Gotówka</option>
-        </select>
-        <button type="submit">Dodaj płatność</button>
-      </form>
-
-      <h3>Dodaj płatność zaplanowaną</h3>
-      <form id="recurring-form" class="form">
-        <input type="text" id="recurring-name" placeholder="Nazwa (np. Netflix)" required>
-        <input type="text" id="recurring-amount" placeholder="Kwota (np. 50,00)" required>
-        <select id="recurring-source">
-          <option value="bank">Konto bankowe</option>
-          <option value="cash">Gotówka</option>
-        </select>
-        <select id="recurring-interval">
-          <option value="monthly">Miesięcznie</option>
-          <option value="weekly">Tygodniowo</option>
-        </select>
-        <button type="submit">Dodaj płatność zaplanowaną</button>
-      </form>
+      <div class="card">
+        <h3>Dni wypłat</h3>
+        <form id="payoutForm" class="form">
+          <label>Dzień miesiąca:</label>
+          <input type="number" id="payoutDay" min="1" max="31" required>
+          <button type="submit">Dodaj dzień wypłaty</button>
+        </form>
+        <ul id="payoutList"></ul>
+      </div>
     </div>
   </div>
 
-  <!-- DOLNA NAWIGACJA -->
+  <!-- Nawigacja -->
   <nav class="bottom-nav">
-    <button class="nav-btn active" data-target="dashboard">
-      <span class="icon">🏠</span>
-      <span class="label">Dashboard</span>
+    <button class="nav-btn active" data-view="dashboard">
+      <span class="icon">📊</span><span>Dashboard</span>
     </button>
-    <button class="nav-btn" data-target="transactions">
-      <span class="icon">💳</span>
-      <span class="label">Transakcje</span>
+    <button class="nav-btn" data-view="transactions">
+      <span class="icon">💰</span><span>Transakcje</span>
     </button>
-    <button class="nav-btn" data-target="settings">
-      <span class="icon">⚙️</span>
-      <span class="label">Ustawienia</span>
+    <button class="nav-btn" data-view="payments">
+      <span class="icon">📅</span><span>Płatności</span>
+    </button>
+    <button class="nav-btn" data-view="settings">
+      <span class="icon">⚙️</span><span>Ustawienia</span>
     </button>
   </nav>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="app.js"></script>
+  <script src="db.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js");
+    }
+  </script>
 </body>
 </html>

@@ -1,172 +1,177 @@
-document.addEventListener("DOMContentLoaded",()=>{
+// ------------------ Dane ------------------
+let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+let payments = JSON.parse(localStorage.getItem("payments")) || [];
+let settings = JSON.parse(localStorage.getItem("settings")) || { minIncome: 0 };
+let payouts = JSON.parse(localStorage.getItem("payouts")) || [];
 
-// 🔹 Nawigacja
-const navButtons=document.querySelectorAll(".nav-btn");
-navButtons.forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    navButtons.forEach(b=>b.classList.remove("active"));
+// ------------------ Nawigacja ------------------
+document.querySelectorAll(".nav-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+    document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+    document.getElementById(btn.dataset.view).classList.add("active");
     btn.classList.add("active");
-    const target=btn.dataset.target;
-    document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
-    document.getElementById("view-"+target).classList.add("active");
+    updateUI();
   });
 });
 
-// 🔹 Fix iOS viewport
-function fixViewportHeight(){document.documentElement.style.setProperty('--vh',window.innerHeight*0.01+'px');}
-window.addEventListener('resize',fixViewportHeight);
-fixViewportHeight();
-
-// 🔹 Dane
-let incomes=Array(12).fill(0);
-let bankBalance=0, cashBalance=0, savingsBalance=0;
-let minIncome=null;
-let payments=[], recurringPayments=[];
-
-// 🔹 Formatowanie
-function formatPLN(value){return Number(value).toFixed(2).replace('.',',')+" PLN";}
-
-// 🔹 Salda
-const balanceBankEl=document.getElementById('bank-balance');
-const balanceCashEl=document.getElementById('cash-balance');
-const balanceSavingsEl=document.getElementById('savings-balance');
-function refreshBalances(){
-  if(balanceBankEl)balanceBankEl.textContent=formatPLN(bankBalance);
-  if(balanceCashEl)balanceCashEl.textContent=formatPLN(cashBalance);
-  if(balanceSavingsEl)balanceSavingsEl.textContent=formatPLN(savingsBalance);
-}
-
-// 🔹 Wykres
-const incomeCtx=document.getElementById('income-chart').getContext('2d');
-const incomeChart=new Chart(incomeCtx,{type:'bar',data:{labels:['Sty','Lut','Mar','Kwi','Maj','Cze','Lip','Sie','Wrz','Paź','Lis','Gru'],datasets:[{label:'Zarobki',data:incomes,backgroundColor:'rgba(59,130,246,0.7)',borderColor:'rgba(59,130,246,1)',borderWidth:1}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
-
-// 🔹 Minimalny zarobek
-const incomeGoalStatusEl=document.getElementById("income-goal-status");
-function refreshIncomeGoal(){
-  if(!incomeGoalStatusEl) return;
-  if(!minIncome){incomeGoalStatusEl.textContent="Brak ustawionego celu."; return;}
-  const month=new Date().getMonth();
-  const earned=incomes[month];
-  const remaining=minIncome-earned;
-  incomeGoalStatusEl.textContent=remaining>0?`Do celu brakuje: ${formatPLN(remaining)}`:`Cel osiągnięty! (+${formatPLN(Math.abs(remaining))})`;
-}
-
-// 🔹 Transakcje
-const txForm=document.getElementById('transaction-form');
-const txList=document.getElementById('tx-list');
-if(txForm){txForm.addEventListener('submit',e=>{
+// ------------------ Transakcje ------------------
+document.getElementById("transactionForm").addEventListener("submit", e => {
   e.preventDefault();
-  const date=document.getElementById('tx-date').value;
-  let amountInput=document.getElementById('tx-amount').value.trim().replace(',','.');
-  const amount=parseFloat(amountInput);
-  const type=document.getElementById('tx-type').value;
-  const source=document.getElementById('tx-source').value;
-  const note=document.getElementById('tx-note').value;
-  if(isNaN(amount)){alert("Podaj poprawną kwotę (np. 5,50 lub 5.50)");return;}
-  if(type==='income'){
-    if(source==='bank') bankBalance+=amount;
-    if(source==='cash') cashBalance+=amount;
-    if(source==='savings') savingsBalance+=amount;
-    const month=new Date(date).getMonth();
-    incomes[month]+=amount;
-    incomeChart.data.datasets[0].data[month]=incomes[month];
-    incomeChart.update();
-  }else{
-    if(source==='bank') bankBalance-=amount;
-    if(source==='cash') cashBalance-=amount;
-    if(source==='savings') savingsBalance-=amount;
-  }
-  refreshBalances();
-  refreshIncomeGoal();
-  const li=document.createElement('li');
-  li.textContent=`${date} | ${type==='income'?'+':'-'}${formatPLN(amount)} | ${note} [${source}]`;
-  txList.appendChild(li);
-  txForm.reset();
-}});
+  let amount = parseFloat(document.getElementById("amount").value.replace(",", "."));
+  let type = document.getElementById("type").value;
+  let account = document.getElementById("account").value;
 
-// 🔹 Nadchodzące płatności
-const paymentsListEl=document.getElementById("upcoming-payments");
-function refreshPayments(){
-  if(!paymentsListEl) return;
-  paymentsListEl.innerHTML="";
-  payments.forEach(p=>{
-    const today=new Date();
-    const payDate=new Date(p.date);
-    const diffTime=payDate-today;
-    const daysLeft=Math.ceil(diffTime/(1000*60*60*24));
-    const li=document.createElement("li");
-    li.textContent=`${p.name} – ${daysLeft} dni – ${formatPLN(p.amount)} (${p.source})`;
-    paymentsListEl.appendChild(li);
-  });
-}
-const paymentForm=document.getElementById("payment-form");
-if(paymentForm){paymentForm.addEventListener("submit",e=>{
-  e.preventDefault();
-  let name=document.getElementById("payment-name").value;
-  let amount=document.getElementById("payment-amount").value.replace(',','.');
-  let date=document.getElementById("payment-date").value;
-  let source=document.getElementById("payment-source").value;
-  let parsed=parseFloat(amount);
-  if(!name||isNaN(parsed)||!date){alert("Podaj poprawne dane płatności.");return;}
-  payments.push({name,amount:parsed,date,source});
-  refreshPayments();
-  paymentForm.reset();
-}});
+  if (isNaN(amount)) return alert("Podaj poprawną kwotę");
 
-// 🔹 Płatności zaplanowane
-const recurringListEl=document.getElementById("recurring-payments");
-function refreshRecurring(){
-  if(!recurringListEl) return;
-  recurringListEl.innerHTML="";
-  recurringPayments.forEach(p=>{
-    let nextDate=calcNextDate(p);
-    let diff=Math.ceil((nextDate-new Date())/(1000*60*60*24));
-    const li=document.createElement("li");
-    li.textContent=`${p.name} – ${formatPLN(p.amount)} (${p.source}) | ${p.interval} | następna: ${nextDate.toLocaleDateString()} (${diff} dni)`;
-    recurringListEl.appendChild(li);
-  });
-}
-function calcNextDate(payment){
-  let now=new Date();
-  let next=new Date(payment.lastPaid);
-  if(payment.interval==="monthly") next.setMonth(next.getMonth()+1);
-  else next.setDate(next.getDate()+7);
-  while(next<now){
-    if(payment.interval==="monthly") next.setMonth(next.getMonth()+1);
-    else next.setDate(next.getDate()+7);
-  }
-  return next;
-}
-const recurringForm=document.getElementById("recurring-form");
-if(recurringForm){recurringForm.addEventListener("submit",e=>{
-  e.preventDefault();
-  let name=document.getElementById("recurring-name").value;
-  let amount=document.getElementById("recurring-amount").value.replace(',','.');
-  let source=document.getElementById("recurring-source").value;
-  let interval=document.getElementById("recurring-interval").value;
-  let parsed=parseFloat(amount);
-  if(!name||isNaN(parsed)){alert("Podaj poprawne dane płatności zaplanowane.");return;}
-  recurringPayments.push({name,amount:parsed,source,interval,lastPaid:new Date()});
-  refreshRecurring();
-  recurringForm.reset();
-}});
+  transactions.push({ amount, type, account, date: new Date().toISOString() });
+  localStorage.setItem("transactions", JSON.stringify(transactions));
 
-// 🔹 Formularz ustawień
-const settingsForm=document.getElementById("settings-form");
-if(settingsForm){settingsForm.addEventListener('submit',e=>{
-  e.preventDefault();
-  let bankVal=parseFloat(settingsForm.querySelector('#init-bank').value.replace(',','.'))||0;
-  let cashVal=parseFloat(settingsForm.querySelector('#init-cash').value.replace(',','.'))||0;
-  let savingsVal=parseFloat(settingsForm.querySelector('#init-savings').value.replace(',','.'))||0;
-  let minInc=parseFloat(settingsForm.querySelector('#min-income').value.replace(',','.'));
-  bankBalance=bankVal; cashBalance=cashVal; savingsBalance=savingsVal;
-  if(!isNaN(minInc)) minIncome=minInc;
-  refreshBalances();
-  refreshIncomeGoal();
-  alert("Zapisano ustawienia!");
-}});
-
-// 🔹 Init
-refreshBalances(); refreshIncomeGoal(); refreshPayments(); refreshRecurring();
-
+  e.target.reset();
+  updateUI();
 });
+
+// ------------------ Płatności ------------------
+document.getElementById("paymentForm").addEventListener("submit", e => {
+  e.preventDefault();
+  let name = document.getElementById("paymentName").value;
+  let amount = parseFloat(document.getElementById("paymentAmount").value.replace(",", "."));
+  let date = document.getElementById("paymentDate").value;
+  let account = document.getElementById("paymentAccount").value;
+
+  if (!date || isNaN(amount)) return alert("Wpisz poprawne dane");
+
+  payments.push({ name, amount, date, account });
+  localStorage.setItem("payments", JSON.stringify(payments));
+
+  e.target.reset();
+  updateUI();
+});
+
+// ------------------ Ustawienia ------------------
+document.getElementById("settingsForm").addEventListener("submit", e => {
+  e.preventDefault();
+  let minIncome = parseFloat(document.getElementById("minIncome").value.replace(",", "."));
+  settings.minIncome = isNaN(minIncome) ? 0 : minIncome;
+  localStorage.setItem("settings", JSON.stringify(settings));
+  updateUI();
+});
+
+// ------------------ Wypłaty ------------------
+document.getElementById("payoutForm").addEventListener("submit", e => {
+  e.preventDefault();
+  let day = parseInt(document.getElementById("payoutDay").value);
+  if (day < 1 || day > 31) return alert("Niepoprawny dzień");
+
+  payouts.push(day);
+  localStorage.setItem("payouts", JSON.stringify(payouts));
+
+  e.target.reset();
+  updateUI();
+});
+
+function removePayout(index) {
+  payouts.splice(index, 1);
+  localStorage.setItem("payouts", JSON.stringify(payouts));
+  updateUI();
+}
+
+// ------------------ UI ------------------
+function updateUI() {
+  // Salda
+  let bank = 0, cash = 0, savings = 0, incomeThisMonth = 0;
+  let month = new Date().getMonth();
+
+  transactions.forEach(t => {
+    if (t.type === "income") {
+      if (t.account === "bank") bank += t.amount;
+      if (t.account === "cash") cash += t.amount;
+      if (t.account === "savings") savings += t.amount;
+      if (new Date(t.date).getMonth() === month) incomeThisMonth += t.amount;
+    } else {
+      if (t.account === "bank") bank -= t.amount;
+      if (t.account === "cash") cash -= t.amount;
+      if (t.account === "savings") savings -= t.amount;
+    }
+  });
+
+  document.getElementById("bankBalance").textContent = `Konto bankowe: ${bank.toFixed(2)} PLN`;
+  document.getElementById("cashBalance").textContent = `Gotówka: ${cash.toFixed(2)} PLN`;
+  document.getElementById("savingsBalance").textContent = `Oszczędności: ${savings.toFixed(2)} PLN`;
+
+  // Minimalny zarobek
+  let diff = settings.minIncome - incomeThisMonth;
+  document.getElementById("minIncomeStatus").textContent =
+    diff > 0
+      ? `Brakuje ${diff.toFixed(2)} PLN do celu (${settings.minIncome} PLN)`
+      : `Cel zarobku osiągnięty! (${incomeThisMonth.toFixed(2)} PLN)`;
+
+  // Historia transakcji
+  document.getElementById("transactionList").innerHTML = transactions
+    .slice().reverse().map(t =>
+      `<li>${t.type === "income" ? "➕" : "➖"} ${t.amount.toFixed(2)} PLN (${t.account})</li>`
+    ).join("");
+
+  // Lista płatności
+  document.getElementById("paymentList").innerHTML = payments
+    .map((p, i) => `<li>${p.name}: ${p.amount.toFixed(2)} PLN - ${p.date} (${p.account})</li>`)
+    .join("");
+
+  // Nadchodzące płatności
+  let today = new Date();
+  document.getElementById("upcomingPayments").innerHTML = payments
+    .map(p => {
+      let diffDays = Math.ceil((new Date(p.date) - today) / (1000 * 60 * 60 * 24));
+      return diffDays >= 0
+        ? `<li>${p.name}: ${p.amount.toFixed(2)} PLN za ${diffDays} dni (${p.account})</li>`
+        : "";
+    }).join("");
+
+  // Nadchodzące wypłaty
+  document.getElementById("payoutList").innerHTML = payouts
+    .map((d, i) => `<li>Dzień ${d} <button onclick="removePayout(${i})">❌</button></li>`)
+    .join("");
+
+  document.getElementById("upcomingPayouts").innerHTML = payouts
+    .map(d => {
+      let now = new Date();
+      let payoutDate = new Date(now.getFullYear(), now.getMonth(), d);
+
+      if (payoutDate < now) payoutDate.setMonth(payoutDate.getMonth() + 1);
+
+      let diffDays = Math.ceil((payoutDate - now) / (1000 * 60 * 60 * 24));
+
+      return diffDays === 0
+        ? `<li>🎉 Dziś wypłata (${d}.${now.getMonth() + 1})</li>`
+        : `<li>Wypłata za ${diffDays} dni (${d}.${payoutDate.getMonth() + 1})</li>`;
+    }).join("");
+
+  // Wykres zarobków
+  let ctx = document.getElementById("incomeChart").getContext("2d");
+  if (window.incomeChart) window.incomeChart.destroy();
+
+  let monthlyIncome = Array(12).fill(0);
+  transactions.forEach(t => {
+    if (t.type === "income") {
+      let m = new Date(t.date).getMonth();
+      monthlyIncome[m] += t.amount;
+    }
+  });
+
+  window.incomeChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["Styczeń","Luty","Marzec","Kwiecień","Maj","Czerwiec","Lipiec","Sierpień","Wrzesień","Październik","Listopad","Grudzień"],
+      datasets: [{
+        label: "Zarobki",
+        data: monthlyIncome,
+        backgroundColor: "rgba(59,130,246,0.7)"
+      }]
+    },
+    options: {
+      scales: { y: { beginAtZero: true } }
+    }
+  });
+}
+
+updateUI();

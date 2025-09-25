@@ -24,7 +24,7 @@ body {
 }
 
 .container {
-  padding: 1rem 0.5rem; /* dopasowanie paddingu po bokach, by pola się mieściły */
+  padding: 1rem 0.5rem;
 }
 
 h2, h3 {
@@ -45,14 +45,14 @@ h2, h3 {
 .form select,
 .form button {
   display: block;
-  width: 100%;           /* wypełnia kontener */
-  max-width: 400px;      /* ograniczenie szerokości na większych ekranach */
-  margin: 0.3rem auto;   /* wyśrodkowanie i odstęp między polami */
+  width: 100%;
+  max-width: 400px;
+  margin: 0.3rem auto;
   padding: 0.6rem;
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 1rem;
-  box-sizing: border-box; /* padding nie zwiększa szerokości */
+  box-sizing: border-box;
 }
 
 .form button {
@@ -124,7 +124,7 @@ canvas {
   max-width: 100%;
 }
 
-/* Scroll dla list płatności/ transakcji */
+/* Scroll */
 .card ul {
   max-height: 150px;
   overflow-y: auto;
