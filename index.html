@@ -1,151 +1,166 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Finance Planner</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="manifest" href="manifest.json">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Finance Planner</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <div class="container">
 
-    <!-- Dashboard -->
-    <div id="dashboard" class="view active">
-      <h2>Dashboard</h2>
-      <div class="card">
-        <h3>Stan kont</h3>
-        <p id="bankBalance">Konto bankowe: 0 PLN</p>
-        <p id="cashBalance">Gotówka: 0 PLN</p>
-        <p id="savingsBalance">Oszczędności: 0 PLN</p>
-      </div>
-      <div class="card">
-        <h3>Wykres zarobków</h3>
-        <canvas id="incomeChart"></canvas>
-      </div>
-      <div class="card">
-        <h3>Minimalny planowany zarobek</h3>
-        <p id="minIncomeStatus"></p>
-      </div>
-      <div class="card">
-        <h3>Nadchodzące płatności</h3>
-        <ul id="upcomingPayments"></ul>
-      </div>
-      <div class="card">
-        <h3>Nadchodzące wypłaty</h3>
-        <ul id="upcomingPayouts"></ul>
-      </div>
+<div class="install-instruction" id="installInstruction">
+  <p>Dodaj aplikację do ekranu początkowego, aby działała poprawnie offline.</p>
+</div>
+
+<div class="container">
+
+  <!-- Dashboard -->
+  <div id="dashboard" class="view active">
+    <h2>Dashboard</h2>
+    <div class="card">
+      <h3>Stan kont</h3>
+      <p id="bankBalance">Konto bankowe: 0 PLN</p>
+      <p id="cashBalance">Gotówka: 0 PLN</p>
+      <p id="savingsBalance">Oszczędności: 0 PLN</p>
     </div>
-
-    <!-- Transakcje -->
-    <div id="transactions" class="view">
-      <h2>Transakcje</h2>
-      <form id="transactionForm" class="form">
-        <label>Kwota:</label>
-        <input type="text" id="amount" required>
-        <label>Typ:</label>
-        <select id="type">
-          <option value="income">Zarobek</option>
-          <option value="expense">Wydatek</option>
-        </select>
-        <label>Konto:</label>
-        <select id="account">
-          <option value="bank">Konto bankowe</option>
-          <option value="cash">Gotówka</option>
-          <option value="savings">Oszczędności</option>
-        </select>
-        <button type="submit">Dodaj</button>
-      </form>
-      <div class="card">
-        <h3>Historia</h3>
-        <ul id="transactionList"></ul>
-      </div>
+    <div class="card">
+      <h3>Wykres zarobków</h3>
+      <canvas id="incomeChart"></canvas>
     </div>
-
-    <!-- Płatności -->
-    <div id="payments" class="view">
-      <h2>Płatności zaplanowane</h2>
-      <form id="paymentForm" class="form">
-        <label>Nazwa:</label>
-        <input type="text" id="paymentName" required>
-        <label>Kwota:</label>
-        <input type="text" id="paymentAmount" required>
-        <label>Data (YYYY-MM-DD):</label>
-        <input type="date" id="paymentDate" required>
-        <label>Konto:</label>
-        <select id="paymentAccount">
-          <option value="bank">Konto bankowe</option>
-          <option value="cash">Gotówka</option>
-        </select>
-        <button type="submit">Dodaj</button>
-      </form>
-      <div class="card">
-        <h3>Lista płatności</h3>
-        <ul id="paymentList"></ul>
-      </div>
+    <div class="card">
+      <h3>Minimalny planowany zarobek</h3>
+      <p id="minIncomeStatus"></p>
     </div>
-
-    <!-- Ustawienia -->
-    <div id="settings" class="view">
-      <h2>Ustawienia</h2>
-
-      <div class="settings-section">
-        <form id="settingsForm" class="form">
-          <label>Minimalny miesięczny zarobek (PLN):</label>
-          <input type="text" id="minIncome">
-          <button type="submit">Zapisz</button>
-        </form>
-      </div>
-
-      <div class="settings-section">
-        <h3>Początkowe saldo</h3>
-        <form id="initialBalanceForm" class="form">
-          <label>Konto bankowe:</label>
-          <input type="text" id="initialBank" placeholder="0">
-          <label>Gotówka:</label>
-          <input type="text" id="initialCash" placeholder="0">
-          <label>Oszczędności:</label>
-          <input type="text" id="initialSavings" placeholder="0">
-          <button type="submit">Zapisz saldo</button>
-        </form>
-      </div>
-
-      <div class="settings-section">
-        <h3>Dni wypłat</h3>
-        <form id="payoutForm" class="form">
-          <label>Dzień miesiąca:</label>
-          <input type="number" id="payoutDay" min="1" max="31" required>
-          <button type="submit">Dodaj dzień wypłaty</button>
-        </form>
-        <ul id="payoutList"></ul>
-      </div>
+    <div class="card">
+      <h3>Nadchodzące płatności</h3>
+      <ul id="upcomingPayments"></ul>
     </div>
-
+    <div class="card">
+      <h3>Nadchodzące wypłaty</h3>
+      <ul id="upcomingPayouts"></ul>
+    </div>
   </div>
 
-  <!-- Nawigacja -->
-  <nav class="bottom-nav">
-    <button class="nav-btn active" data-view="dashboard">
-      <span class="icon">📊</span><span>Dashboard</span>
-    </button>
-    <button class="nav-btn" data-view="transactions">
-      <span class="icon">💰</span><span>Transakcje</span>
-    </button>
-    <button class="nav-btn" data-view="payments">
-      <span class="icon">📅</span><span>Płatności</span>
-    </button>
-    <button class="nav-btn" data-view="settings">
-      <span class="icon">⚙️</span><span>Ustawienia</span>
-    </button>
-  </nav>
+  <!-- Transakcje -->
+  <div id="transactions" class="view">
+    <h2>Transakcje</h2>
+    <form id="transactionForm" class="form">
+      <label>Kwota:</label>
+      <input type="text" id="amount" required>
+      <label>Typ:</label>
+      <select id="type">
+        <option value="income">Zarobek</option>
+        <option value="expense">Wydatek</option>
+      </select>
+      <label>Konto:</label>
+      <select id="account">
+        <option value="bank">Konto bankowe</option>
+        <option value="cash">Gotówka</option>
+        <option value="savings">Oszczędności</option>
+      </select>
+      <button type="submit">Dodaj</button>
+    </form>
+    <div class="card">
+      <h3>Historia</h3>
+      <ul id="transactionList"></ul>
+    </div>
+  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="db.js"></script>
-  <script src="app.js"></script>
-  <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("sw.js");
-    }
-  </script>
+  <!-- Płatności -->
+  <div id="payments" class="view">
+    <h2>Płatności zaplanowane</h2>
+    <form id="paymentForm" class="form">
+      <label>Nazwa:</label>
+      <input type="text" id="paymentName" required>
+      <label>Kwota:</label>
+      <input type="text" id="paymentAmount" required>
+      <label>Data (YYYY-MM-DD):</label>
+      <input type="date" id="paymentDate" required style="max-width:400px;">
+      <label>Konto:</label>
+      <select id="paymentAccount">
+        <option value="bank">Konto bankowe</option>
+        <option value="cash">Gotówka</option>
+      </select>
+      <button type="submit">Dodaj</button>
+    </form>
+    <div class="card" style="margin-top:1rem;">
+      <h3>Lista płatności</h3>
+      <ul id="paymentList"></ul>
+    </div>
+  </div>
+
+  <!-- Ustawienia -->
+  <div id="settings" class="view">
+    <h2>Ustawienia</h2>
+
+    <div class="settings-section">
+      <form id="settingsForm" class="form">
+        <label>Minimalny miesięczny zarobek (PLN):</label>
+        <input type="text" id="minIncome">
+        <button type="submit">Zapisz</button>
+      </form>
+    </div>
+
+    <div class="settings-section">
+      <h3>Początkowe saldo</h3>
+      <form id="initialBalanceForm" class="form">
+        <label>Konto bankowe:</label>
+        <input type="text" id="initialBank" placeholder="0">
+        <label>Gotówka:</label>
+        <input type="text" id="initialCash" placeholder="0">
+        <label>Oszczędności:</label>
+        <input type="text" id="initialSavings" placeholder="0">
+        <button type="submit">Zapisz saldo</button>
+      </form>
+    </div>
+
+    <div class="settings-section">
+      <h3>Dni wypłat</h3>
+      <form id="payoutForm" class="form">
+        <label>Dzień miesiąca:</label>
+        <input type="number" id="payoutDay" min="1" max="31" required>
+        <button type="submit">Dodaj dzień wypłaty</button>
+      </form>
+      <ul id="payoutList"></ul>
+    </div>
+
+    <div class="settings-section">
+      <button id="resetApp" style="background:#e11d48; color:#fff;">Resetuj aplikację</button>
+    </div>
+  </div>
+</div>
+
+<!-- Nawigacja -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" data-view="dashboard">
+    <img src="icons/dashboard.svg" class="icon"/><span>Dashboard</span>
+  </button>
+  <button class="nav-btn" data-view="transactions">
+    <img src="icons/transactions.svg" class="icon"/><span>Transakcje</span>
+  </button>
+  <button class="nav-btn" data-view="payments">
+    <img src="icons/payments.svg" class="icon"/><span>Płatności</span>
+  </button>
+  <button class="nav-btn" data-view="settings">
+    <img src="icons/settings.svg" class="icon"/><span>Ustawienia</span>
+  </button>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="db.js"></script>
+<script src="app.js"></script>
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js");
+}
+
+// Instrukcja instalacji w Safari
+if (!window.matchMedia('(display-mode: standalone)').matches) {
+  document.getElementById("installInstruction").style.display="block";
+} else {
+  document.getElementById("installInstruction").style.display="none";
+}
+</script>
 </body>
 </html>

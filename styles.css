@@ -90,7 +90,7 @@ ul {
   background: none;
   border: none;
   padding: 0.5rem;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   color: var(--text);
   display: flex;
   flex-direction: column;
@@ -103,7 +103,9 @@ ul {
 }
 
 .nav-btn .icon {
-  font-size: 1.5rem;
+  width: 24px;
+  height: 24px;
+  margin-bottom: 2px;
 }
 
 .view {
@@ -127,4 +129,13 @@ canvas {
 /* Większe odstępy w ustawieniach */
 .settings-section {
   margin-bottom: 2rem;
+}
+
+/* Instalacja PWA */
+.install-instruction {
+  display: none;
+  background: var(--primary);
+  color: #fff;
+  padding: 0.8rem;
+  text-align: center;
 }
