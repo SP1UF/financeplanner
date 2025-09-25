@@ -23,17 +23,16 @@
         <canvas id="income-chart" height="120"></canvas>
       </div>
       <div class="card">
-        <h3>Realizacja celów</h3>
-        <div id="goals-charts-container"></div>
-        <button id="add-goal-btn">Dodaj cel</button>
-      </div>
-      <div class="card">
         <h3>Minimalny zarobek miesięczny</h3>
         <p id="income-goal-status">Brak ustawionego celu.</p>
       </div>
       <div class="card">
         <h3>Nadchodzące płatności</h3>
         <ul id="upcoming-payments"></ul>
+      </div>
+      <div class="card">
+        <h3>Płatności zaplanowane</h3>
+        <ul id="recurring-payments"></ul>
       </div>
     </div>
   </div>
@@ -61,14 +60,6 @@
     </div>
   </div>
 
-  <!-- CELE -->
-  <div id="view-goals" class="view">
-    <div class="container">
-      <h2>Cele</h2>
-      <div id="goals-list"></div>
-    </div>
-  </div>
-
   <!-- USTAWIENIA -->
   <div id="view-settings" class="view">
     <div class="container">
@@ -85,7 +76,7 @@
         <button type="submit">Zapisz</button>
       </form>
 
-      <h3>Dodaj płatność</h3>
+      <h3>Dodaj nadchodzącą płatność</h3>
       <form id="payment-form" class="form">
         <input type="text" id="payment-name" placeholder="Nazwa (np. Czynsz)" required>
         <input type="text" id="payment-amount" placeholder="Kwota (np. 1200,00)" required>
@@ -95,6 +86,21 @@
           <option value="cash">Gotówka</option>
         </select>
         <button type="submit">Dodaj płatność</button>
+      </form>
+
+      <h3>Dodaj płatność zaplanowaną</h3>
+      <form id="recurring-form" class="form">
+        <input type="text" id="recurring-name" placeholder="Nazwa (np. Netflix)" required>
+        <input type="text" id="recurring-amount" placeholder="Kwota (np. 50,00)" required>
+        <select id="recurring-source">
+          <option value="bank">Konto bankowe</option>
+          <option value="cash">Gotówka</option>
+        </select>
+        <select id="recurring-interval">
+          <option value="monthly">Miesięcznie</option>
+          <option value="weekly">Tygodniowo</option>
+        </select>
+        <button type="submit">Dodaj płatność zaplanowaną</button>
       </form>
     </div>
   </div>
@@ -108,10 +114,6 @@
     <button class="nav-btn" data-target="transactions">
       <span class="icon">💳</span>
       <span class="label">Transakcje</span>
-    </button>
-    <button class="nav-btn" data-target="goals">
-      <span class="icon">🎯</span>
-      <span class="label">Cele</span>
     </button>
     <button class="nav-btn" data-target="settings">
       <span class="icon">⚙️</span>

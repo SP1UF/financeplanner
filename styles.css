@@ -20,16 +20,12 @@ body {
   font-family: sans-serif;
   background: var(--bg);
   color: var(--text);
-  padding-bottom: 70px; /* miejsce na dolną nawigację */
+  padding-bottom: 70px;
 }
 
-.container {
-  padding: 1rem;
-}
+.container { padding: 1rem; }
 
-h2, h3 {
-  margin-top: 0.5rem;
-}
+h2,h3 { margin-top:0.5rem; }
 
 .card {
   background: var(--card-bg);
@@ -55,34 +51,11 @@ h2, h3 {
   border: none;
 }
 
-#tx-list, #goals-list, #upcoming-payments {
-  list-style: none;
-  padding: 0;
-}
-
-.goal-item, .goal-settings-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.4rem 0;
-}
-
-.goal-item button, .goal-settings-item button {
-  margin-left: 0.5rem;
-}
-
-.goal-chart-wrapper {
-  display: inline-block;
-  width: 120px;
-  text-align: center;
-  margin: 0.5rem;
-}
+ul { list-style:none; padding:0; }
 
 .bottom-nav {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 0; left: 0; right: 0;
   height: 70px;
   background: var(--card-bg);
   display: flex;
@@ -91,25 +64,14 @@ h2, h3 {
 }
 
 .nav-btn {
-  flex: 1;
-  background: none;
-  border: none;
-  padding: 0.5rem;
-  font-size: 0.8rem;
-  color: var(--text);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex:1; background:none; border:none;
+  padding:0.5rem; font-size:0.8rem;
+  color: var(--text); display:flex;
+  flex-direction:column; align-items:center;
 }
 
-.nav-btn.active {
-  color: var(--primary);
-  font-weight: bold;
-}
+.nav-btn.active { color: var(--primary); font-weight:bold; }
+.nav-btn .icon { font-size:1.5rem; }
 
-.nav-btn .icon {
-  font-size: 1.5rem;
-}
-
-.view { display: none; }
-.view.active { display: block; }
+.view { display:none; }
+.view.active { display:block; }
