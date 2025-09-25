@@ -9,8 +9,14 @@
 </head>
 <body>
 
-<div class="install-instruction" id="installInstruction">
-  <p>Dodaj aplikację do ekranu początkowego, aby działała poprawnie offline.</p>
+<div id="installInstruction" class="install-instruction">
+  <h2>Instrukcja instalacji</h2>
+  <p>Aby korzystać z aplikacji w trybie pełnoekranowym i offline, dodaj ją do ekranu początkowego:</p>
+  <ol>
+    <li>Na iPhone kliknij ikonę "Udostępnij" w Safari.</li>
+    <li>Wybierz "Dodaj do ekranu początkowego".</li>
+    <li>Potwierdź nazwę i kliknij "Dodaj".</li>
+  </ol>
 </div>
 
 <div class="container">
@@ -75,8 +81,8 @@
       <input type="text" id="paymentName" required>
       <label>Kwota:</label>
       <input type="text" id="paymentAmount" required>
-      <label>Data (YYYY-MM-DD):</label>
-      <input type="date" id="paymentDate" required style="max-width:400px;">
+      <label>Data:</label>
+      <input type="date" id="paymentDate" required style="max-width:100%;">
       <label>Konto:</label>
       <select id="paymentAccount">
         <option value="bank">Konto bankowe</option>
@@ -126,7 +132,7 @@
     </div>
 
     <div class="settings-section">
-      <button id="resetApp" style="background:#e11d48; color:#fff;">Resetuj aplikację</button>
+      <button id="resetApp" class="reset-btn">Resetuj aplikację</button>
     </div>
   </div>
 </div>

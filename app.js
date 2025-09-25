@@ -113,7 +113,6 @@ function updateUI(){
   document.getElementById("minIncomeStatus").textContent=diff>0?`Brakuje ${diff.toFixed(2)} PLN do celu (${settings.minIncome} PLN)`:`Cel zarobku osiągnięty! (${incomeThisMonth.toFixed(2)} PLN)`;
 
   document.getElementById("transactionList").innerHTML=transactions.slice().reverse().map(t=>`<li>${t.type==="income"?"+":"-"} ${t.amount.toFixed(2)} PLN (${t.account})</li>`).join("");
-
   document.getElementById("paymentList").innerHTML=payments.map((p,i)=>`<li>${p.name}: ${p.amount.toFixed(2)} PLN - ${p.date} (${p.account}) <button onclick="removePayment(${i})">❌</button></li>`).join("");
 
   let today=new Date();
@@ -123,7 +122,6 @@ function updateUI(){
   }).join("");
 
   document.getElementById("payoutList").innerHTML=payouts.map((d,i)=>`<li>Dzień ${d} <button onclick="removePayout(${i})">❌</button></li>`).join("");
-
   document.getElementById("upcomingPayouts").innerHTML=payouts.map(d=>{
     let now=new Date();
     let payoutDate=new Date(now.getFullYear(),now.getMonth(),d);
