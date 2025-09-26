@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Finance Planner</title>
-<link rel="stylesheet" href="styles.css">
-<link rel="manifest" href="manifest.json">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Finance Planner</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-<div id="installInstruction" class="install-instruction">
-  <h2>Instrukcja instalacji</h2>
-  <p>Aby korzystać z aplikacji w trybie pełnoekranowym i offline, dodaj ją do ekranu początkowego:</p>
+<!-- Instrukcja instalacji -->
+<div id="installOverlay" class="install-overlay">
+  <h2>Dodaj aplikację do ekranu początkowego</h2>
+  <p>Aby korzystać w trybie pełnoekranowym:</p>
   <ol>
-    <li>Na iPhone kliknij ikonę "Udostępnij" w Safari.</li>
-    <li>Wybierz "Dodaj do ekranu początkowego".</li>
-    <li>Potwierdź nazwę i kliknij "Dodaj".</li>
+    <li>W Safari kliknij <strong>Udostępnij</strong>.</li>
+    <li>Wybierz <strong>Dodaj do ekranu początkowego</strong>.</li>
   </ol>
+  <button onclick="closeInstallInstructions()">OK</button>
 </div>
 
 <div class="container">
@@ -32,7 +34,7 @@
     </div>
     <div class="card">
       <h3>Wykres zarobków</h3>
-      <canvas id="incomeChart"></canvas>
+      <canvas id="incomeChart" height="200"></canvas>
     </div>
     <div class="card">
       <h3>Minimalny planowany zarobek</h3>
@@ -82,7 +84,7 @@
       <label>Kwota:</label>
       <input type="text" id="paymentAmount" required>
       <label>Data:</label>
-      <input type="date" id="paymentDate" required style="max-width:100%;">
+      <input type="date" id="paymentDate" required>
       <label>Konto:</label>
       <select id="paymentAccount">
         <option value="bank">Konto bankowe</option>
@@ -140,16 +142,16 @@
 <!-- Nawigacja -->
 <nav class="bottom-nav">
   <button class="nav-btn active" data-view="dashboard">
-    <img src="icons/dashboard.svg" class="icon"/><span>Dashboard</span>
+    <i class="fas fa-home"></i><span>Dashboard</span>
   </button>
   <button class="nav-btn" data-view="transactions">
-    <img src="icons/transactions.svg" class="icon"/><span>Transakcje</span>
+    <i class="fas fa-wallet"></i><span>Transakcje</span>
   </button>
   <button class="nav-btn" data-view="payments">
-    <img src="icons/payments.svg" class="icon"/><span>Płatności</span>
+    <i class="fas fa-credit-card"></i><span>Płatności</span>
   </button>
   <button class="nav-btn" data-view="settings">
-    <img src="icons/settings.svg" class="icon"/><span>Ustawienia</span>
+    <i class="fas fa-cog"></i><span>Ustawienia</span>
   </button>
 </nav>
 
@@ -159,13 +161,6 @@
 <script>
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("sw.js");
-}
-
-// Instrukcja instalacji w Safari
-if (!window.matchMedia('(display-mode: standalone)').matches) {
-  document.getElementById("installInstruction").style.display="block";
-} else {
-  document.getElementById("installInstruction").style.display="none";
 }
 </script>
 </body>
